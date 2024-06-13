@@ -1,0 +1,70 @@
+
+% ---------------------- % INSTRUCTIONS % ---------------------- %
+% Compile this and save the PDF
+% This PDF can then be uploaded as a figure to the repository and included in main.tex
+
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+\usepackage{bm}
+\usetikzlibrary{shapes.geometric}
+
+% Nice captions.
+\usepackage[hang,small,bf]{caption}
+\setlength{\captionmargin}{25pt}
+
+% Unfortunately we have to do some more in-depth tikz as simple tikz doesn't seem to allow several things
+
+\begin{document}
+
+\begin{tikzpicture}[
+      scale=0.5,
+      solid_line/.style={thick},
+      dashed_line/.style={thin,dashed},
+      thin_line/.style={thin},
+      white_line/.style={thin,white}
+    ]
+
+    % ------------------------------------------------------------------ %
+    % Draw white box
+    % ------------------------------------------------------------------ %
+
+    \draw[white_line] (-0.1cm,-2.2cm) -- (5.5cm,-2.2cm) -- (5.5cm,3.1cm) -- (-0.1cm,3.1cm) -- cycle;
+
+
+    % ------------------------------------------------------------------ %
+    % Draw the element
+    % ------------------------------------------------------------------ %
+
+    % swept volume
+    \draw[fill=gray, fill opacity=0.5, draw=none] (1.0cm,0.6cm) -- (1.0cm,2.1cm) -- (4.4cm,2.45cm) -- (4.4cm,0.95cm) -- cycle ;
+    \draw[dashed_line] (1.0cm,0.6cm) -- (1.0cm,2.1cm) ;
+
+    % x-coordinate lines
+    \draw[thin_line] (0cm,0.5cm) -- (5.0cm,1.0cm) ;
+    \draw[thin_line] (0cm,2.0cm) -- (5.0cm,2.5cm) ;
+
+    % y-coordinate lines
+    \draw[thin_line] (0.2cm,0.0cm) -- (0.2cm,3.0cm) ;
+    \draw[thin_line] (1.6cm,0.0cm) -- (1.6cm,3.0cm) ;
+    \draw[thin_line] (3.0cm,0.0cm) -- (3.0cm,3.0cm) ;
+    \draw[thin_line] (4.4cm,0.0cm) -- (4.4cm,3.0cm) ;
+
+    % arrow for flux
+    \draw [-latex](4.4cm,1.725cm) -- (5.0cm,1.725cm);
+
+    % ------------------------------------------------------------------ %
+    % Annotations
+    % ------------------------------------------------------------------ %
+    \node[anchor=center,scale=0.4] at (4.85cm,1.4cm) {$u_{i+1/2}$} ;
+    \node[anchor=center,scale=0.4] at (4.85cm,0.3cm) {$x_{i+1/2}$} ;
+    \node[anchor=center,scale=0.4] at (1.0cm,0.3cm) {$x^{dep}_{i+1/2}$} ;
+    \node[anchor=center,scale=0.4] at (2.3cm,1.45cm) {$V_{i-1}$} ;
+    \node[anchor=center,scale=0.4] at (3.7cm,1.6cm) {$V_i$} ;
+
+    \node[anchor=center,scale=0.4] at (2.5cm,-0.6cm) {$F_{i+1/2} = \displaystyle\frac{1}{\Delta t}\displaystyle\int_{V(x=x^{dep}_{i+1/2})}^{V(x=x_{i+1/2})} \rho \, \mathrm{d}V$} ;
+
+    \node[anchor=center,scale=0.4] at (2.5cm,-1.6cm) {$\rho_{i}^{n+1}=\rho_i^{n} - \displaystyle\frac{\Delta t}{V_i}\left(F_{i+1/2} - F_{i-1/2}\right)$} ;
+
+    \end{tikzpicture}
+
+\end{document} 

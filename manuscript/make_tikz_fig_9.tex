@@ -1,0 +1,75 @@
+
+% ---------------------- % INSTRUCTIONS % ---------------------- %
+% Compile this and save the PDF
+% This PDF can then be uploaded as a figure to the repository and included in main.tex
+
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+\usepackage{bm}
+\usetikzlibrary{arrows}
+
+% Nice captions.
+\usepackage[hang,small,bf]{caption}
+\setlength{\captionmargin}{25pt}
+
+% Unfortunately we have to do some more in-depth tikz as simple tikz doesn't seem to allow several things
+
+\begin{document}
+
+\begin{tikzpicture}[
+      scale=0.5,
+      solid_line/.style={thick},
+      dotted_line/.style={thick,dotted,gray},
+      thin_line/.style={thin},
+    ]
+    % ------------------------------------------------------------------ %
+    % Draw the primary mesh
+    % ------------------------------------------------------------------ %
+    \draw[solid_line] (0cm,0em) -- (12cm,0em) ;
+    \draw[solid_line] (0cm,5em) -- (12cm,5em) ;
+    \draw[solid_line] (0cm,11em) -- (12cm,11em) ;
+    \draw[solid_line] (0cm,16em) -- (12cm,16em) ;
+    \draw[solid_line] (0cm,22em) -- (12cm,22em) ;
+    \draw[solid_line] (0cm,30em) -- (12cm,30em) ;
+
+    \draw[thin_line] (3cm,0em) -- (3cm,30em) ;
+    \draw[thin_line] (9cm,0em) -- (9cm,30em) ;
+
+    \draw[dotted_line] (0cm,2.5em) -- (12cm,2.5em) ;
+    \draw[dotted_line] (0cm,8em) -- (12cm,8em) ;
+    \draw[dotted_line] (0cm,13.5em) -- (12cm,13.5em) ;
+    \draw[dotted_line] (0cm,19em) -- (12cm,19em) ;
+    \draw[dotted_line] (0cm,26em) -- (12cm,26em) ;
+    % ------------------------------------------------------------------ %
+    % Draw the shifted mesh
+    % ------------------------------------------------------------------ %
+    \draw[solid_line] (16cm,0em) -- (28cm,0em) ;
+    \draw[solid_line] (16cm,2.5em) -- (28cm,2.5em) ;
+    \draw[solid_line] (16cm,8em) -- (28cm,8em) ;
+    \draw[solid_line] (16cm,13.5em) -- (28cm,13.5em) ;
+    \draw[solid_line] (16cm,19em) -- (28cm,19em) ;
+    \draw[solid_line] (16cm,26em) -- (28cm,26em) ;
+    \draw[solid_line] (16cm,30em) -- (28cm,30em) ;
+
+    \draw[thin_line] (19cm,0em) -- (19cm,30em) ;
+    \draw[thin_line] (25cm,0em) -- (25cm,30em) ;
+
+    \draw[dotted_line] (16cm,1.25em) -- (28cm,1.25em) ;
+    \draw[dotted_line] (16cm,5.25em) -- (28cm,5.25em) ;
+    \draw[dotted_line] (16cm,10.75em) -- (28cm,10.75em) ;
+    \draw[dotted_line] (16cm,16.25em) -- (28cm,16.25em) ;
+    \draw[dotted_line] (16cm,22.5em) -- (28cm,22.5em) ;
+    \draw[dotted_line] (16cm,28em) -- (28cm,28em) ;
+
+    % ------------------------------------------------------------------ %
+    % Text
+    % ------------------------------------------------------------------ %
+    \node[] at (6cm,32em) {Primary Mesh} ;
+    \node[] at (22cm,32em) {Shifted Mesh} ;
+
+    \node[align=left] at (12.5cm,13.5em) {$\rho$} ;
+    \node[align=left] at (12.5cm,16em) {$m$} ;
+    \node[align=left] at (29.0cm,16.25em) {$\widetilde{\rho}$, $\widetilde{m}$} ;
+    \end{tikzpicture}
+
+\end{document} 
