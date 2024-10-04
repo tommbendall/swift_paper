@@ -16,10 +16,10 @@ from tomplot import (set_tomplot_style, tomplot_contours, tomplot_cmap,
 # Things that can be altered and parameters for the test case
 # ---------------------------------------------------------------------------- #
 # Directories for results and to plot to
-branch = 'r48987_swift_paper-transport-meto-spice-three_d'
-results_dirname_stem = f'/data/users/tbendall/cylc-run/{branch}/share/output/intel_64-bit_fast-debug/transport'
-plotdir = f'/data/users/tbendall/results/swift_paper'
-mesh_dt = 'BiP64x64-1000x1000_dt-2p5'  # dt is 0p5, 1p25 or 2p5
+branch = 'swift_revision'
+results_dirname = f'/data/users/tbendall/results/{branch}'
+plotdir = f'/data/users/tbendall/results/swift_revision'
+mesh_dt = '64_2p5'  # dt is 0p5, 1p25 or 2p5
 
 # To alter test-by-test
 fig_idx = 8
@@ -28,9 +28,9 @@ title = r'Three-dimensional Test, $c_{max}=4.8$'
 
 # Options relating to the different fields to be plotted
 field_names = ['rho', 'tracer_con', 'tracer_adv']
-cbar_labels = [r"$\rho \ / $ kg m$^{-3}$",
-               r"$m \ / $ kg kg$^{-1}$",
-               r"$m^L \ / $ kg kg$^{-1}$"]
+cbar_labels = [r"$\rho$ (kg m$^{-3}$)",
+               r"$m$ (kg kg$^{-1}$)",
+               r"$m^L$ (kg kg$^{-1}$)"]
 colour_schemes = ['YlGn', 'BuPu', 'BuPu']
 remove_contours = [None, 0.0, 0.0]
 
@@ -42,7 +42,7 @@ slice_along = 'y'
 slice_at = 0.00078125  # Nearest value to the center
 
 # Options shared for all plots and subplots
-time_factor = 250.0  # For some reason LFRic outputs the wrong time
+time_factor = 25.0  # For some reason LFRic outputs the wrong time
 xlabel = r'$x \ /$ km'
 ylabel = r'$z \ /$ km'
 contour_method = 'contour'
@@ -81,8 +81,7 @@ for time_idx in time_idxs:
 
             ax = axarray.flatten()[j*len(field_names)+i]
 
-            results_dirname = f'{results_dirname_stem}/{results_opt}_skam3d/{mesh_dt}/results'
-            main_filename = f'{results_dirname}/lfric_diag.nc'
+            main_filename = f'{results_dirname}/{results_opt}_skam3d_{mesh_dt}_diag.nc'
 
             data_file = Dataset(main_filename, 'r')
 

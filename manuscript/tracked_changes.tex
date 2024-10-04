@@ -1,107 +1,96 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[margin=2cm]{geometry}
-\usepackage{bm} % for bold maths symbols
-\usepackage{enumitem} % for more flexibility with lists
-\usepackage{array}  % to give vertical centering in tables
-\usepackage[pdftex]{graphicx} % for including images
-\usepackage{subcaption} % for side by side figures
-\usepackage{amssymb} % for mathbb
-\usepackage{amsmath} % for align and tfrac
-\usepackage{amsthm} % for theorem / proofs
-\usepackage{natbib}
-\usepackage{hyperref} % for interactable links
-\usepackage{authblk} % for author and affiliations
-\usepackage{fancyhdr} % For headers and footers
-\usepackage{mathtools} % For dcases environment: cases with displaystyle for large integrals
-\usepackage{tikz-cd}
-\usepackage{multirow}
-\bibliographystyle{plainnat}
-\usepackage{lineno}
+%% Version 6.1, 1 September 2021
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TemplateV6.1.tex --  LaTeX-based blank template for submissions to the 
+% American Meteorological Society
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PREAMBLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Some common commands used by Tom
-\newcommand{\grad}[1]{{\bm{\nabla}{#1}}}
-\newcommand{\dv}[1]{\bm{\nabla\cdot{#1}}}
-\newcommand{\curl}[1]{\bm{\nabla}\times\bm{#1}}
+%% Start with one of the following:
+% 1.5-SPACED VERSION FOR SUBMISSION TO THE AMS
+\documentclass{ametsocV6.1}
+
+% TWO-COLUMN JOURNAL PAGE LAYOUT---FOR AUTHOR USE ONLY
+% \documentclass[twocol]{ametsocV6.1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Our packages and commands
+
+\usepackage{multirow}
+\usepackage{mathtools} % For dcases environment: cases with displaystyle for large integrals
+
 \newcommand{\pfrac}[2]{\frac{\partial{#1}}{\partial{#2}}}
 \newcommand{\dx}[1]{\hspace{0.75mm}\mathrm{d}{#1}}
-\newcommand{\der}[2]{\frac{\dx{#1}}{\dx{#2}}}
-\newcommand{\cder}[2]{\frac{\mathrm{D}#1}{\mathrm{D}#2}}
-\newcommand{\curlybrackets}[1]{\left\lbrace{#1}\right\rbrace}
+\newcommand{\change}[1]{\textcolor{red}{#1}}
 
-\newtheorem{requirement}{Requirement}
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{proposition}{Proposition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\captionsetup{font=small}
-
-% --------------------------------------------------- %
-% Things depending on where this is being submitted
-% --------------------------------------------------- %
-% Header / Footer for adding Crown copyright statement
-\pagestyle{fancy}
-\fancyhf{}
-\lfoot{\textcopyright \ Crown Copyright, Met Office}
-\cfoot{\thepage}
-
-% Need to adjust it for the first page as well
-\fancypagestyle{plain}{
-\fancyhf{}
-\lfoot{\textcopyright \ Crown Copyright, Met Office}
-\cfoot{\thepage}
-}
-
-% Keywords command
-\providecommand{\keywords}[1]
-{
-  \small	
-  \textbf{\textit{Keywords---}} #1
-}
+%%% To be entered by author:
 
 \title{SWIFT: A Monotonic, Flux-Form Semi-Lagrangian Tracer Transport Scheme for Flow with Large Courant Numbers}
 
+\authors{Thomas M. Bendall,\aff{a}\correspondingauthor{Thomas M. Bendall, thomas.bendall@metoffice.gov.uk} 
+James Kent,\aff{a}}
 
-\author[1]{Thomas M. Bendall\thanks{Corresponding author, contact at thomas.bendall@metoffice.gov.uk}}
-\author[1]{James Kent}
-\affil[1]{Dynamics Research, Met Office, Exeter, UK}
-\date{}
+\affiliation{\aff{a}{Dynamics Research, Met Office, Exeter, UK}}
 
-\begin{document}
-
-\maketitle
-
-\begin{abstract}
-\noindent
-Local conservation of mass and entropy are becoming increasingly desirable properties for modern numerical weather and climate models.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ABSTRACT
+%
+% Enter your abstract here
+% Abstracts should not exceed 250 words in length!
+%
+ 
+\abstract{Local conservation of mass and entropy are becoming increasingly desirable properties for modern numerical weather and climate models.
 This work presents a Flux-Form Semi-Lagrangian (FFSL) transport scheme, called SWIFT, that facilitates this conservation for tracer variables, whilst maintaining other vital properties such as preservation of a constant, monotonicity and positivity.
-Importantly, these properties all hold for large Courant numbers and multi-dimensional flow, making the scheme appropriate for use within a dynamical core which takes large time steps. \\
-\\
-The SWIFT scheme presented here can be seen as an evolution of the FFSL methods of Leonard et al and Lin and Rood.
+Importantly, these properties all hold for large Courant numbers and multi-dimensional flow, making the scheme appropriate for use within a dynamical core which takes large time steps. 
+The SWIFT scheme presented here can be seen as an evolution of the FFSL methods of Leonard et al.\ and Lin and Rood.
 Two-dimensional and three-dimensional schemes consist of a splitting into a sequence of one-dimensional calculations.
 The new SWIFT splitting presented here allows monotonic and positivity properties from the one-dimensional calculations to be inherited by the multi-dimensional scheme.
 These one-dimensional calculations involve separating the mass flux into terms that correspond to integer and fractional parts of the Courant number.
 Key to achieving conservation is coupling the transport of tracers to the transport of the fluid density, through re-use of the discrete mass flux that was calculated from the fluid density in the transport of the tracers.
-This work also describes how these properties can still be attained when the tracer is vertically-staggered from the density in a Charney-Phillips grid.
+This work also describes how these properties can still be attained when the tracer is vertically-staggered from the density in a Charney-Phillips grid.}
 
+\begin{document}
 
-\end{abstract}
-\keywords{\textbf{Tracer transport, Conservation, Semi-Lagrangian, Transport Equation, Consistency}}
-% Line numbers
-% \linenumbers
+%% Necessary!
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SIGNIFICANCE STATEMENT/CAPSULE SUMMARY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\statement
+%	 Enter significance statement here, no more than 120 words. See \url{www.ametsoc.org/index.cfm/ams/publications/author-information/significance-statements/} for details.
+This work presents an algorithm to be used in weather and climate models to describe the transport of quantities by the wind.
+This algorithm is intended to be used for the transport of tracers such as cloud or chemicals in the atmosphere.
+The significance of the algorithm is that it conserves the mass of these tracers, and can avoid the generation of unphysical negative concentrations. \change{Importantly}, these properties still hold when the wind is fast relative to the \change{ratio of the grid spacing to the} size of the time steps taken by the atmospheric model.
+
+%% * * If using twocol mode, you will need to use the commands "twocolsig" and "twocolcapsule" in place of "sig" and "capsule"
+%%      to ensure that the text box correctly spans across both columns.
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MAIN BODY OF PAPER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 
 \section{Motivation and Overview} \label{sec:intro}
 \subsection{Desirable Properties for Transport Schemes}
 Numerical methods for solving the transport equation are a core component of atmospheric models that are used for weather prediction and climate research.
 These equations typically take two forms:
+\change{
 \begin{subequations}
 \begin{align}
 & \pfrac{\rho}{t} + \bm{\nabla\cdot}\left(\rho\bm{u}\right) = 0, \label{eqn:conservative_transport} \\
 & \pfrac{m}{t} + \left(\bm{u\cdot\nabla}\right)m = 0, \label{eqn:advective_transport}
 \end{align}
-\end{subequations}
-which are known as the \textit{conservative} form \eqref{eqn:conservative_transport} for a density field $\rho$ or the \textit{advective} form \eqref{eqn:advective_transport} which may be used for instance for a tracer mixing ratio\footnote{The mixing ratio of a species is defined as the ratio of the mass density of the species to some reference mass density, which in this work is denoted by $\rho$. In atmospheric applications this could be the density of dry air.} $m$. 
-In both forms, $\bm{u}$ is the wind velocity field.
+\end{subequations}}
+\change{which are known as} the \textit{conservative} form \eqref{eqn:conservative_transport} for a density field $\rho$ or the \textit{advective} form \eqref{eqn:advective_transport} which may be used for instance for a tracer mixing ratio\footnote{The mixing ratio of a species is defined as the ratio of the mass density of the species to some reference mass density, which in this work is denoted by $\rho$. In atmospheric applications this could be the density of dry air.} $m$. 
+\change{In both forms,} $\bm{u}$ is the wind velocity field.
 Considering the equation for the product $\rho m$ (which describes the density of the tracer species), it can be shown that this obeys:
 \begin{equation}
 \pfrac{\rho m}{t} + \bm{\nabla\cdot}\left(\rho m\bm{u}\right) = 0. \label{eqn:tracer_conservative}
@@ -109,16 +98,16 @@ Considering the equation for the product $\rho m$ (which describes the density o
 The relevance of this form of the transport equation is that discretisations of \eqref{eqn:conservative_transport} and \eqref{eqn:tracer_conservative} provide local (and hence global) mass conservation, in that each cell has a closed mass budget when taking into account the mass fluxes into neighbouring cells.
 As discussed by \cite{thuburn2008some}, these conservation properties are desirable for weather and particularly climate models, so that the discretisation itself does not become a net source or sink of the tracer.
 Locally-conservative schemes naturally provide a closed budget for the tracer species. 
-Additionally, for the transport of a density, \citet{lin1996ffsl} and \citet{melvin2024mixed} argue that any conservative transport scheme should provide increments that are linear in $\bm{\nabla\cdot u}$ when the density is constant, a property that we will describe here as \textit{divergence-linearity}.
-The corollary of this is that any density field remains constant under divergence-free flow.\footnote{This property is described as ``constancy'' by \citet{leonard1996cosmic}, while it is a sub-property of the ``consistency'' described by \citet{lin1996ffsl}.}
+Additionally, for the transport of a density, \citet{lin1996ffsl} and \citet{melvin2024mixed} argue that any conservative transport scheme should provide increments that are linear in $\bm{\nabla\cdot u}$ \change{when the density is constant, a property that we will describe here as \textit{divergence-linearity}.
+The corollary of this is that any density field remains constant under divergence-free flow}.\footnote{\change{This property is described as ``constancy'' by \citet{leonard1996cosmic}, while it is a sub-property of the ``consistency'' described by \citet{lin1996ffsl}}.}
 \\
 \\
 However other properties are also important for tracer transport schemes: it can be vital that the scheme is \textit{positivity-preserving} so that unphysical negative concentrations are not produced.
 A stronger possible requirement is that of \textit{monotonicity}, which prevents the introduction of new minima or maxima in the solution.
 Note that as discussed by \citet{lauritzen2011numerical}, in contrast to $m$, the product $\rho m$ will not in general remain bounded by its initial extrema in divergent flows, but its evolution should be \textit{shape-preserving} in the sense that no new unphysical extrema are generated.
 In this work we focus on the monotonicity requirement of keeping the minima and maxima of mixing ratios bounded by their initial values.
-It is also important for a conservative tracer transport scheme to be consistent with both the advective form of the equation and the conservative transport of $\rho$ (see \citep{jockel2001fundamental} and \citep{zhang2008consistency}).
-Thus the property of \textit{consistency} is defined as the preservation of a constant mixing ratio, independent of the flow.
+It is also important for a conservative tracer transport scheme to be consistent with \change{both} the advective form of the equation \change{and the conservative transport of $\rho$} (see \citep{jockel2001fundamental} and \citep{zhang2008consistency}).
+\change{Thus the property of \textit{consistency} is defined as the preservation of a constant mixing ratio}, independent of the flow.
 Finally, many operational numerical weather prediction models use large time steps.
 It is therefore highly attractive to use a scheme which is stable at large Courant numbers\footnote{For instance, the finest resolution global configurations discussed in \citet{walters2019met} correspond to Courant numbers of around 5 in the mid-latitude jets.}
 whilst maintaining computational efficiency and without compromising the other properties listed here.
@@ -141,11 +130,11 @@ FFSL schemes involve computing mass fluxes by integrating fields between flux po
 Conservation is inherent, as increments are evaluated from the divergence of fluxes, which are shared between cells.
 Like standard semi-Lagrangian schemes, stability is not conditional on the Courant number which permits large time steps. \\
 \\
-Instead, the stability of the scheme depends upon the Lipschitz number, which measures the one-dimensional divergence of the velocity $\bm{u}$ seen by a discretisation with time step $\Delta t$.
+\change{Instead, the stability of the scheme depends upon the Lipschitz number, which measures the one-dimensional divergence of the velocity $\bm{u}$ seen by a discretisation with time step $\Delta t$.
 In other words $\Delta t|\partial u /\partial x|$ in the $x$-direction and similar for other directions.
 In an Arakawa C-grid staggering, in which density fields are located at cell centres and the velocity is described by its components normal to each facet, the Lipschitz numbers are naturally calculated at cell centres.
 However Lipschitz numbers can also be calculated at facets, so that in one-dimension $\ell=(c-c^\dagger) \, \mathrm{sign}(c)$, where $c$ is the Courant number at that facet and $c^\dagger$ is the Courant number at the next facet upwind.
-The result is that when this number is above 1, the trajectories of discrete particles can cross \citep{smolarkiewicz1992class}.\\
+The result is that when this number is above 1, the trajectories of discrete particles can cross \citep{smolarkiewicz1992class}.}\\
 \\
 The multi-dimensional forms of FFSL presented by \citet{leonard1996cosmic} and \citet{lin1996ffsl} are built from one-dimensional calculations through dimensional-splitting techniques.
 Following \citet{leonard1996cosmic}, the multi-dimensional splitting of \citet{leonard1996cosmic} and \citet{lin1996ffsl} will be referred to as the COSMIC splitting throughout this work.
@@ -193,20 +182,20 @@ A three-dimensional form of this scheme is presented in Section \ref{sec:3D_CP},
 \citet{lin1996ffsl} describe large time-step-permitting finite-volume schemes as one-dimensional FFSL schemes. These one-dimensional FFSL schemes compute the flux by integrating the field from the flux point to a departure point. The Courant number is separated into integer and fractional parts. The integer part corresponds to the integral of the field over entire grid cells, which is just the sum over these cells of the field multiplied by the cell volume. The fractional part corresponds to the spatial integral of the field within the cell in which the departure point lies, to compute the mass corresponding to the fractional part of the Courant number. A subgrid reconstruction is used to represent the field within the cell, and this is integrated from the cell edge to the departure point. \\
 \\
 In this section, the one-dimensional FFSL calculation is reviewed, but on a general one-, two- or three-dimensional mesh.
-At first, calculations of mass fluxes are described for a density $\rho$.
-For simplicity, the one-dimensional scheme is described in the $x$ direction only, where $x_i$ are the coordinates of cell centres, $i$ is the grid index, $V_i$ is the volume of the $i$-th cell, and $\rho_i=\rho(x_i)$ is the density in cell $i$.
-Mass fluxes are computed at cell facets, and denoted by $F_{i+1/2}$.
+\change{At first, calculations of mass fluxes are described for a density $\rho$.}
+For simplicity, the one-dimensional scheme is described in the $x$ direction only, where $x_i$ are the coordinates of cell centres, $i$ is the grid index, $V_i$ is the volume of the $i$-th cell, and $\change{\rho}_i=\change{\rho}(x_i)$ is the \change{density} in cell $i$.
+\change{Mass fluxes are computed at cell facets, and denoted by $F_{i+1/2}$.}
 The cell facets $\varGamma_{i+1/2}$ are vertices for one-dimensional meshes, edges for two-dimensional meshes, and faces for three-dimensional meshes, and are indexed by an additional $1/2$ to indicate that these are staggered from cell centres.
 While $\bm{u}$ is the general wind velocity vector, $u_{i+1/2}$ is its projection onto the normal $\bm{n}$ to the facet $\varGamma_{i+1/2}$.
 The facet has length or area $S_{i+1/2}$, so that
 \begin{equation} \label{eqn:u_normal}
 u_{i+1/2} S_{i+1/2} =
-\int_{\varGamma_{i+1/2}} \bm{u \cdot n} \ \mathrm{d}S = \int_{\varGamma_{i+1/2}} \bm{u} \bm{\cdot} \mathrm{d}\bm{S},
+\int_{\varGamma_{i+1/2}} \change{\bm{u \cdot n} \ \mathrm{d}S} = \int_{\varGamma_{i+1/2}} \bm{u} \bm{\cdot} \mathrm{d}\bm{S},
 \end{equation}
 where $\mathrm{d}\bm{S}$ is the measure denoting integration over the facet.
 When the mesh is one-dimensional, $V_i=\Delta x_i$ and $S_{i+1/2}=1$.
-For a multi-dimensional mesh, $\bm{u}$ can naturally be expanded through either primal basis vectors (which point tangential to mesh lines) or dual basis vectors (which are normal to mesh lines).
-These are not equivalent if the mesh is not orthogonal, in which case the quantity $u_{i+1/2}$ corresponds to the contravariant component of $\bm{u}$, which multiplies the primal basis vector on $\varGamma_{i+1/2}$.
+\change{For a multi-dimensional mesh, $\bm{u}$ can naturally be expanded through either primal basis vectors (which point tangential to mesh lines) or dual basis vectors (which are normal to mesh lines).
+These are not equivalent if the mesh is not orthogonal, in which case the quantity $u_{i+1/2}$ corresponds to the contravariant component of $\bm{u}$, which multiplies the primal basis vector on $\varGamma_{i+1/2}$.}
 
 \subsubsection{Subgrid Reconstruction}
 
@@ -251,7 +240,7 @@ c_{i+1/2} = c^{int}_{i+1/2} + c^{frac}_{i+1/2},
 \end{equation}
 where $c^{int}$ is the integer part, and $c^{frac}$ the fractional part. \\
 \\
-For a general non-uniform grid, $c_{i+1/2}$ must be computed so that the integer and fractional parts have the same meaning as for the uniform grid.
+\change{For a general non-uniform grid}, $c_{i+1/2}$ must be computed so that the integer and fractional parts have the same meaning as for the uniform grid.
 The integer part is thus computed as
 \begin{equation} \label{eqn:int_courant}
 c^{int}_{i+1/2} = 
@@ -279,26 +268,26 @@ c^{frac}_{i+1/2} =
 \end{dcases}
 \end{equation}
 where the volume factor in the denominator is the volume of the cell containing the departure point.
-Note that in some of the following sections, the volume factors appearing in \eqref{eqn:int_courant}, \eqref{eqn:frac_wind} and \eqref{eqn:frac_courant} will be substituted for other fields, such as a mass field.
+\change{Note that in some of the following sections, the volume factors appearing in \eqref{eqn:int_courant}, \eqref{eqn:frac_wind} and \eqref{eqn:frac_courant} will be substituted for other fields, such as a mass field.}
 
 \subsubsection{Flux Integral} \label{sec:ffsl_flux_integral}
 
-Given the departure point $x^{dep}_{i+1/2}$, the flux of $\rho$ is computed as the integral of the mass between the flux point and the departure point as
+Given the departure point $x^{dep}_{i+1/2}$, the flux \change{of $\rho$} is computed as the integral of the mass between the flux point and the departure point as
 \begin{equation}
 F_{i+1/2} = 
-\frac{1}{S_{i+1/2}\Delta{t}} \int^{V(x=x_{i+1/2})}_{V(x=x^{dep}_{i+1/2})} \rho \dx{V}.  
+\frac{1}{S_{i+1/2}\Delta{t}} \int^{V(x=x_{i+1/2})}_{V(x=x^{dep}_{i+1/2})} \change{\rho} \dx{V}.  
 \end{equation}
 As with the Courant number, the flux can be split into an integer and fractional flux, denoted $F^{int}$ and $F^{frac}$ respectively, where $F = F^{int} + F^{frac}$.
 The integer part is computed by summing the integral of the field over the whole cells between the flux point and the departure point:
 \begin{equation}
     F^{int}_{i+1/2} = 
     \begin{dcases}
-        \frac{1}{S_{i+1/2}\Delta{t}}\sum_{j=1}^{c_{i+1/2}^{int}} \rho_{i+1-j} V_{i+1-j}, & u_{i+1/2} \geq 0, \\
-        \frac{1}{S_{i+1/2}\Delta{t}}\sum_{j=1}^{|c_{i+1/2}^{int}|} \rho_{i+j} V_{i+j}, & u_{i+1/2} < 0.
+        \frac{1}{S_{i+1/2}\Delta{t}}\sum_{j=1}^{c_{i+1/2}^{int}} \change{\rho}_{i+1-j} V_{i+1-j}, & u_{i+1/2} \geq 0, \\
+        \frac{1}{S_{i+1/2}\Delta{t}}\sum_{j=1}^{|c_{i+1/2}^{int}|} \change{\rho}_{i+j} V_{i+j}, & u_{i+1/2} < 0.
     \end{dcases}
 \end{equation}
 The fractional part uses the subgrid reconstruction from the chosen scheme.
-Although any reconstruction can be used, in this work we focus on the quadratic PPM reconstruction of $\mathcal{Q}(\xi)$ as in \eqref{eqn:quad_coef}. The fractional flux integrates the subgrid reconstruction from the facet to the departure point:
+\change{Although any reconstruction can be used, in this work we focus on the quadratic PPM reconstruction of $\mathcal{Q}(\xi)$ as in \eqref{eqn:quad_coef}. The fractional flux integrates the subgrid reconstruction from the facet to the departure point}:
 \begin{equation} \label{eqn:frac_flux}
     F^{frac}_{i+1/2} = 
     \begin{dcases}
@@ -310,13 +299,13 @@ The fractional flux of \eqref{eqn:frac_flux} can be expressed in another form, w
 The subgrid reconstruction $\mathcal{Q}(\xi)$ uses coefficients that are determined from field values in neighbouring grid cells.
 It is therefore possible to rewrite the integral of $\mathcal{Q}(\xi)$ as a linear sum of the neighbouring field values, where the weights are polynomials in the fractional Courant $c^{frac}$, such that the fractional flux can be written as
 \begin{equation} \label{eqn:consistent_flux}
-F_{i+1/2}^{frac} = \widehat{u}_{i+1/2}^{frac} \mathcal{R}(\rho,c_{i+1/2}^{frac}),
+F_{i+1/2}^{frac} = \widehat{u}_{i+1/2}^{frac} \mathcal{R}(\change{\rho},c_{i+1/2}^{frac}),
 \end{equation}
-where $\mathcal{R}(\rho,c^{frac})$ can be interpreted as a reconstruction of $\rho$ at the facet.
-Importantly, if $\rho$ is some constant $K$ then $\mathcal{R}(\rho,c_{i+1/2}^{frac})=K$ irrespective of $c_{i+1/2}^{frac}$.
+where $\mathcal{R}(\change{\rho},c^{frac})$ can be interpreted as a reconstruction of $\change{\rho}$ at the facet.
+Importantly, if $\change{\rho}$ is some constant $K$ then $\mathcal{R}(\change{\rho},c_{i+1/2}^{frac})=K$ irrespective of $c_{i+1/2}^{frac}$.
 Appendix A discusses the computation of $\mathcal{R}$ for PPM. \\
 \\
-If the density $\rho$ is a constant $K$ across the domain, then the mass flux is simply $F_{i+1/2}=Ku_{i+1/2}$, which can be seen by considering the evaluation of the integer and fractional parts of the flux.
+\change{If the density $\rho$ is a constant $K$ across the domain, then the mass flux is simply $F_{i+1/2}=Ku_{i+1/2}$, which can be seen by considering the evaluation of the integer and fractional parts of the flux.
 The integer part of the flux simplifies to
 \begin{equation}
     F^{int}_{i+1/2} = 
@@ -337,53 +326,54 @@ and therefore
 \begin{equation}
 F_{i+1/2}=F^{int}_{i+1/2}+F_{i+1/2}^{frac} = K\left(u_{i+1/2} - \widehat{u}^{frac}_{i+1/2}\right) + K\widehat{u}^{frac}_{i+1/2} = Ku_{i+1/2}.
 \end{equation}
+}
 
 \subsubsection{One-Dimensional Scheme for Density} 
 \label{sec:1d_density}
-The procedure described in Sections \ref{sec:dep_pt} and \ref{sec:ffsl_flux_integral} is used to compute departure displacements and then mass fluxes at each cell facet.
+\change{The procedure described in parts \ref{sec:dep_pt} and \ref{sec:ffsl_flux_integral} is used to compute departure displacements and then mass fluxes at each cell facet.
 The density is then evolved in time through a simple forward-in-time scheme, so that at a given point:
 \begin{equation}
 \rho_i^{n+1} = \rho^n_i - \frac{\Delta t}{V_i} \left(F^x_{i+1/2}S_{i+1/2} - F^x_{i-1/2}S_{i-1/2}\right),
 \end{equation}
-where the superscript $n$ denotes the density at the $n$-th time level. \\
+where the superscript $n$ denotes the density at the $n$-th time level.} \\
 \\
-For the remainder of this work, we use the operator
+\change{For the remainder of this work, we use the operator
 \begin{equation}
 \mathcal{F}^x(\rho,u^{x},V)
 \end{equation}
-to describe the process of computing departure displacements and evaluating mass fluxes (in the $x$-direction) for the whole domain from the density $\rho$, velocity component $u^x$ and cell volume $V$, following the procedure in Sections \ref{sec:dep_pt} and \ref{sec:ffsl_flux_integral}.
+to describe the process of computing departure displacements and evaluating mass fluxes (in the $x$-direction) for the whole domain from the density $\rho$, velocity component $u^x$ and cell volume $V$, following the procedure in parts \ref{sec:dep_pt} and \ref{sec:ffsl_flux_integral} of Section \ref{sec:ffsl}\ref{sec:1d_ffsl}.
 The final argument represents each time that the cell volume appears in the computation of departure displacements and mass fluxes. 
-With this notation, the one-dimensional scheme for density transport (in the $x$-direction) can be summarised as:
+With this notation}, the one-dimensional scheme for density transport (in the $x$-direction) can be summarised as:
 \begin{equation}
-\rho^{n+1} = \rho^n - \Delta t \nabla_x\cdot \mathcal{F}^x(\rho^n,u^{x},V),
+\rho^{n+1} = \rho^n - \Delta t \nabla_x\cdot \mathcal{F}^x(\rho^n,u^{\change{x}},\change{V}),
 \end{equation}
-where $\nabla_x\cdot$ indicates the one-dimensional discrete divergence calculation.
-When $\rho^n$ is a constant $K$, the mass flux reduces to $Ku^x$ and so the value of the density at the next time level is $K(1-\Delta t\nabla_x\cdot u^x)$. This satisfies the property of divergence-linearity.
+where $\nabla_x\cdot$ \change{indicates} the one-dimensional \change{discrete} divergence calculation.
+\change{When $\rho^n$ is a constant $K$, the mass flux reduces to $Ku^x$ and so the value of the density at the next time level is $K(1-\Delta t\nabla_x\cdot u^x)$. This satisfies the property of divergence-linearity}.
 
 \subsubsection{One-Dimensional Scheme for an Advective Tracer} \label{sec:1d_advect}
 
-As will be seen in the following sections, the COSMIC splitting uses a one-dimensional advective operator, which corresponds to the discretisation of \eqref{eqn:advective_transport}.
+As will be seen in the following sections, the COSMIC splitting uses a one-dimensional advective operator, \change{which corresponds to the discretisation of \eqref{eqn:advective_transport}}.
 Although there is flexibility in the choice of this advective operator (for instance, \citet{lin1996ffsl} use a semi-Lagrangian scheme), in this work we take the approach of \citet{putman2007fvtransport}, using conservative operators and the transport of the unity field. \\
 \\
 Let $\sigma$ be the unity field, and consider the conservative transport of $\sigma m$.
-Dividing the discrete conservative update of $\sigma m$ by the discrete conservative update of $\sigma$ gives a discrete advective update of $m$.
-This means that the discrete advective update of $m$ in the $x$-direction is given by
+Dividing the \change{discrete} conservative \change{update} of $\sigma m$ by the \change{discrete} conservative \change{update} of $\sigma$ gives \change{a discrete} advective \change{update} of $m$.
+This means that the \change{discrete} advective \change{update} of $m$ in the $x$-direction is given by
 \begin{equation} \label{eqn:one_d_advection_tracer_2}
-m^{n+1} = m^{n} - \Delta{t} \mathcal{A}^x(m^n,u) = \left( m^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n,u,V)\right)/\left( \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma,u,V)\right).
+m^{n+1} = m^{n} - \Delta{t} \mathcal{A}^x(m^n,u) = \left( m^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n,u,\change{V})\right)/\left( \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma,u,\change{V})\right).
 \end{equation}
-Following \citet{putman2007fvtransport}, this can be rearranged to give a discrete operator $\mathcal{A}^x(m,u)$ described as the advective increment:
+Following \citet{putman2007fvtransport}, this can be rearranged to give a \change{discrete} operator $\mathcal{A}^x(m,u)$ \change{described as the advective increment}:
 \begin{equation}
-    \Delta{t} \mathcal{A}^x(m^n, u) = m^n - \left( m^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n,u,V)\right)/\left( \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma,u,V)\right).
+    \Delta{t} \mathcal{A}^x(m^n, u) = m^n - \left( m^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n,u,\change{V})\right)/\left( \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma,u,\change{V})\right).
 \end{equation}
 
 \subsection{One-Dimensional Flux-Form Semi-Lagrangian Scheme for Conservative Tracer Transport} \label{sec:consistent_ffsl_1d}
 
-The one-dimensional FFSL scheme is now extended to a tracer mixing ratio $m$ which evolves conservatively relative to a density $\rho$ according to \eqref{eqn:tracer_conservative}.
+The \change{one-dimensional} FFSL scheme is now extended to a tracer mixing ratio $m$ which evolves conservatively relative to a density $\rho$ according to \eqref{eqn:tracer_conservative}.
 It is assumed throughout that $\rho$ is positive.
 As discussed in Section \ref{sec:intro}, the transport of $m$ must be consistent, in the sense that a constant field is preserved.
 In other words, it is required that the scheme solving for $\rho m$ produces the same results as the scheme solving for $\rho$ when $m=1$.
-This is achieved by ensuring that if $m=K$ (where $K$ is a constant), the tracer flux is given by $K\bm{F}$, if the density flux is $\bm{F}$.
-This property is attained by reusing the mass fluxes that are calculated during the transport of the density variable.
+This is achieved by ensuring that if $m=K$ (where $K$ is a constant), the tracer flux \change{is given by $K\bm{F}$}, if the density flux is $\bm{F}$.
+\change{This property is attained by reusing the mass fluxes that are calculated during the transport of the density variable.}
 \\
 \\
 For Eulerian transport schemes, in order to provide consistency it is common to replace the transporting velocity $\bm{u}$ with the mass flux $\bm{F}$ that was used to transport the density $\rho$. This was the approach used by \citet{bendall2023solution} and is particularly relevant if $\rho$ and $m$ are not co-located.
@@ -398,18 +388,18 @@ These are now found by inverting the relationship
 \end{equation}
 This means that for tracer transport, the integer and fractional components of the Courant number are defined differently to those used for the density transport, although they will coincide when $\rho$ is a constant.
 The same is true of the fractional part of the flux.
-However these quantities can all be computed following exactly the same procedure described in Sections \ref{sec:dep_pt} and \ref{sec:ffsl_flux_integral}, but with the following substitutions:
+\change{However these quantities can all be computed following exactly the same procedure described in parts \ref{sec:dep_pt} and \ref{sec:ffsl_flux_integral} of Section \ref{sec:ffsl}\ref{sec:1d_ffsl}, but with the following substitutions:
 $m$ is used in place of $\rho$, $F^x$ takes the role of $u^x$ and the product $\rho V$ is used instead of just $V$.
 For the transport of tracers, we can therefore write flux calculations through an operator of the form $\mathcal{F}^x(m,F^x,\rho V)$, whereas the equivalent operator for the transport of $\rho$ is $\mathcal{F}^x(\rho,u^x,V)$.
 The fractional part of the tracer mass flux is therefore computed using the reconstruction of $m$ multiplied by the fractional part of the density flux $F^x$, and the integer part of the flux is the sum of $\rho m$ multiplied by the cell volume over the integer number of cells.
-With these substitutions, if $m=K$ a constant, the tracer mass flux is $KF^x$. This follows directly from the argument at the end of Section \ref{sec:ffsl_flux_integral}. \\
+With these substitutions, if $m=K$ a constant, the tracer mass flux is $KF^x$. This follows directly from the argument at the end of part \ref{sec:ffsl_flux_integral} of Section \ref{sec:ffsl}\ref{sec:1d_ffsl}.} \\
 \\
 The overall scheme for a tracer mixing ratio for transport in the $x$-direction can then be summarised as
 \begin{equation} \label{eqn:1D_density}
-(\rho m)^{n+1} = (\rho m)^n - \Delta t \nabla_x\cdot \mathcal{F}^x(m^n,F^x,\rho^nV),
+(\rho m)^{n+1} = (\rho m)^n - \Delta t \nabla_x\cdot \mathcal{F}^x(m^n,F^x,\rho^n\change{V}),
 \end{equation}
 where $(\rho m)^n\equiv \rho^n m^n$.
-The mixing ratio at the next time level is then found from
+\change{The mixing ratio at the next time level is then found from
 \begin{equation}
 m^{n+1} = \frac{(\rho m)^n}{\rho^n}.
 \end{equation}
@@ -422,19 +412,19 @@ As the corresponding density transport is given by
 \begin{equation}
 \rho^{n+1} = \rho^n - \Delta t \nabla_x \cdot F^x,
 \end{equation}
-the updated mixing ratio is simply $m^{n+1}=K$ and a constant mixing ratio is preserved. This satisfies the property for consistent tracer transport.
+the updated mixing ratio is simply $m^{n+1}=K$ and a constant mixing ratio is preserved. This satisfies the property for consistent tracer transport.}
 
 \subsection{Review of Two-dimensional COSMIC splitting} \label{sec:cosmic}
 
-The one-dimensional FFSL methods from Section \ref{sec:1d_ffsl} can be used with splitting techniques to solve the two-dimensional transport problem. Here we review the splitting method of \citet{leonard1996cosmic} and \citet{lin1996ffsl}, known as either COSMIC or Lin-Rood splitting (here we will refer to it as COSMIC splitting). This approach has been widely used, as it provides many of the benefits of the one-dimensional methods, namely conservative large time-step-permitting transport, but in two dimensions. However, the monotonic or positive-definite limiters applied for the one-dimensional schemes in Section \ref{sec:ffsl} do not guarantee monotonicity or positivity in two dimensions (especially for large Courant number) \citep{lin1996ffsl,leonard1996cosmic}.
+The one-dimensional FFSL methods from Section \ref{sec:ffsl}\ref{sec:1d_ffsl} can be used with splitting techniques to solve the two-dimensional transport problem. Here we review the splitting method of \citet{leonard1996cosmic} and \citet{lin1996ffsl}, known as either COSMIC or Lin-Rood splitting (here we will refer to it as COSMIC splitting). This approach has been widely used, as it provides many of the benefits of the one-dimensional methods, namely conservative large time-step-permitting transport, but in two dimensions. However, the monotonic or positive-definite limiters applied for the one-dimensional schemes in Section \ref{sec:ffsl} do not guarantee monotonicity or positivity in two dimensions (especially for large Courant number) \citep{lin1996ffsl,leonard1996cosmic}.
 This will be demonstrated by numerical testing in Section \ref{sec:results2d}. \\ 
 \\
-The notation used will follow that from Sections \ref{sec:1d_density} and \ref{sec:1d_advect} . 
-The $x$ and $y$ variables refer to local directions on a regular quadrilateral mesh, rather than the Cartesian $x$- and $y$-directions. Thus
-$\mathcal{F}^x(\rho,u^x,V)$ represents the one-dimensional flux operator in the $x$-direction. 
+The notation used will follow that from parts \ref{sec:1d_density} and \ref{sec:1d_advect} of Section \ref{sec:ffsl}\ref{sec:1d_ffsl}. 
+\change{The $x$ and $y$ variables refer to local directions on a regular quadrilateral mesh, rather than the Cartesian $x$- and $y$-directions. Thus}
+$\mathcal{F}^x(\rho,u^x,\change{V})$ represents the one-dimensional flux operator in the $x$\change{-direction}. 
 As the fluxes are stored on cell edges, the divergence is at cell centres (co-located with $\rho$).
-The advective increment operators for $\rho$ are discretisations of $\bm{u\cdot\nabla}\rho$, and are denoted by $\mathcal{A}^x(\rho,u^x)$ and $\mathcal{A}^y(\rho,u^y)$ in $x$ and $y$ respectively  (see Section \ref{sec:advective_increment} for the calculation of these increments).
-Finally, the velocity fields $u^x$ and $u^y$ are given by \eqref{eqn:u_normal} (and so are defined by the mesh, rather than necessarily being physical $x$- and $y$-components), with the superscript denoting the orientation of the facet.
+The advective increment operators for $\rho$ are \change{discretisations of $\bm{u\cdot\nabla}\rho$, and are} denoted by $\mathcal{A}^x(\rho,u^x)$ and $\mathcal{A}^y(\rho,u^y)$ in $x$ and $y$ respectively  (see part \ref{sec:advective_increment} of Section \ref{sec:ffsl}\ref{sec:cosmic} for the calculation of these increments).
+Finally, the velocity fields $u^x$ and $u^y$ are given by \eqref{eqn:u_normal} (\change{and so are defined by the mesh, rather than necessarily being physical $x$- and $y$-components}), with the superscript denoting the orientation of the facet.
 
 \subsubsection{COSMIC Splitting} \label{sec:cosmic_density}
 The COSMIC splitting is applied to a density field $\rho$ as follows.
@@ -447,18 +437,18 @@ Following \citet{leonard1996cosmic} and \citet{lin1996ffsl}, an advective inner 
 \end{subequations}
 The updated field at the next time level is found from the outer conservative step, applied to the opposite inner update
 \begin{equation} \label{eqn:cosmic_density}
-    \rho^{n+1} = \rho^{n} - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\rho_A^{y/2},u^x,V) - \Delta{t} \nabla_y \cdot \mathcal{F}^y(\rho_A^{x/2},u^y,V).
+    \rho^{n+1} = \rho^{n} - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\rho_A^{y/2},u^x,\change{V}) - \Delta{t} \nabla_y \cdot \mathcal{F}^y(\rho_A^{x/2},u^y,\change{V}).
 \end{equation}
-The inner half steps are in advective form which provides the property of divergence-linearity, as if $\rho^n=K$, then $\rho_A^{x/2}=K$ and $\rho_A^{y/2}=K$, which gives $\rho^{n+1}=K(1-\Delta t\bm{\nabla\cdot u})$.
-Hence a constant $\rho$ subject to a non-divergent flow remains constant. Using $\rho^x$ in $\mathcal{F}^y$ and $\rho^y$ in $\mathcal{F}^x$ ensures that all of the cross-terms are captured \citep{kent2019crossterms} and that the scheme is symmetric. 
+The inner half steps are in advective form \change{which provides the property of divergence-linearity, as if $\rho^n=K$, then $\rho_A^{x/2}=K$ and $\rho_A^{y/2}=K$, which gives $\rho^{n+1}=K(1-\Delta t\bm{\nabla\cdot u})$.}
+\change{Hence} a constant $\rho$ subject to a non-divergent flow remains constant. Using $\rho^x$ in $\mathcal{F}^y$ and $\rho^y$ in $\mathcal{F}^x$ ensures that all of the cross-terms are captured \citep{kent2019crossterms} and that the scheme is symmetric. 
 
 \subsubsection{Advective Increment} \label{sec:advective_increment}
 
-The one-dimensional advective form increment of the density field can be computed using the schemes in Section \ref{sec:ffsl} following the method given in Section \ref{sec:1d_advect}. The advective increments are thus
+The one-dimensional advective form increment of the density field can be computed using the schemes in Section \ref{sec:ffsl} following the method given in part \ref{sec:1d_advect} of Section \ref{sec:ffsl}\ref{sec:1d_ffsl}. The advective increments are thus
 \begin{subequations} \label{eqn:advective_operators}
 \begin{align}
-    \Delta{t} \mathcal{A}^x(\rho^n, u^x) &= \rho^n - \left( \rho^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\rho^n,u^x,V)\right)/\left( \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma,u^x,V)\right), \\
-    \Delta{t} \mathcal{A}^y(\rho^n, u^y) &= \rho^n - \left( \rho^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\rho^n,u^y,V)\right)/\left( \sigma - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\sigma,u^y,V)\right),
+    \Delta{t} \mathcal{A}^x(\rho^n, u^x) &= \rho^n - \left( \rho^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\rho^n,u^x,\change{V})\right)/\left( \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma,u^x,\change{V})\right), \\
+    \Delta{t} \mathcal{A}^y(\rho^n, u^y) &= \rho^n - \left( \rho^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\rho^n,u^y,\change{V})\right)/\left( \sigma - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\sigma,u^y,\change{V})\right),
 \end{align}
 \end{subequations}
 where $\sigma$ is the unity field.
@@ -476,17 +466,17 @@ The inner step is performed on the mixing ratio only
 \end{subequations}
 
 The outer step now uses the dry mass fluxes in place of the velocities to compute the tracer fluxes.
-Following \citet{skamarock2006limiters}, new departure points and fractional mass fluxes need computing, according to the procedure outlined in Section \ref{sec:consistent_ffsl_1d}.
+Following \citet{skamarock2006limiters}, new departure points and fractional mass fluxes need computing, according to the procedure outlined in Section \ref{sec:ffsl}\ref{sec:consistent_ffsl_1d}.
 Then the updated mixing ratio is found from
 \begin{equation} \label{eqn:cosmic_tracer_end}
-   (\rho m)^{n+1} = (\rho m)^{n} - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^{y/2},F^x,\rho^nV) - \Delta{t} \nabla_y\cdot \mathcal{F}^y(m^{x/2},F^y,\rho^nV),
+   (\rho m)^{n+1} = (\rho m)^{n} - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^{y/2},F^x,\rho^n\change{V}) - \Delta{t} \nabla_y\cdot \mathcal{F}^y(m^{x/2},F^y,\rho^n\change{V}),
 \end{equation}
 where $m^{n+1}$ can be backed out by dividing by $\rho^{n+1}$. This approach to consistent COSMIC splitting is used for the numerical results presented in this paper. 
 
 
 \section{Two-dimensional Monotonic SWIFT Splitting} \label{sec:swift_splitting} 
 
-The COSMIC splitting from Section \ref{sec:cosmic} provides large time-step-permitting conservative and consistent transport. However, it does not guarantee monotonicity when monotonic limiters are used for the one-dimensional schemes, especially for large Courant number flow (see \citep{leonard1996cosmic,lin1996ffsl,bott2010improving} and the results from Section \ref{sec:results2d}). \\
+The COSMIC splitting from Section \ref{sec:ffsl}\ref{sec:cosmic} provides large time-step-permitting conservative and consistent transport. However, it does not guarantee monotonicity when monotonic limiters are used for the one-dimensional schemes, especially for large Courant number flow (see \citep{leonard1996cosmic,lin1996ffsl,bott2010improving} and the results from Section \ref{sec:results2d}). \\
 \\
 Here we present a new splitting formulation as part of the SWIFT scheme. This splitting can be used for conservative or advective transport, ensures consistency of tracers, is large time-step-permitting, and enforces monotonicity or positivity in two-dimensions when monotonic or positive-definite limiters are used for the one-dimensional scheme. This means that the monotonic or positivity-preserving properties of the one-dimensional schemes are maintained for the two-dimensional method. 
 
@@ -496,15 +486,15 @@ Let $\sigma$ be the unity field and $\rho$ the dry density field.
 The inner step for density transport consists of conservative steps:
 \begin{subequations} \label{eqn:swift_density_inner}
 \begin{align} \label{eqn:swift_density_x}
-    \rho_I^x &= \rho^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x,V), \\
-    \rho_I^y &= \rho^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,V).
+    \rho_I^x &= \rho^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x,\change{V}), \\
+    \rho_I^y &= \rho^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,\change{V}).
 \end{align}
 \end{subequations}
 The unity field is also transported in conservative form, so that
 \begin{subequations} \label{eqn:sigma_x_sigma_y}
 \begin{align}
-    \sigma^x &= \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma, u^x,V), \\
-    \sigma^y &= \sigma - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\sigma, u^y,V).
+    \sigma^x &= \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma, u^x,\change{V}), \\
+    \sigma^y &= \sigma - \Delta{t} \nabla_y\cdot \mathcal{F}^y(\sigma, u^y,\change{V}).
 \end{align}
 \end{subequations}
 Advective updates are defined using the transported unity fields:
@@ -515,23 +505,23 @@ Advective updates are defined using the transported unity fields:
 \end{align}
 \end{subequations}
 Densities with subscript $I$ denote values obtained from the inner step, while this with subscript $A$ include the division by an appropriately transported unity field to give a density with an advective update.
-The departure points and fractional components of the wind are recomputed using $\sigma^yV$ and $\sigma^xV$ as the \textit{volume} in equations \eqref{eqn:int_courant}-\eqref{eqn:frac_courant}.
+The departure points and fractional components of the wind are recomputed using $\sigma^y\change{V}$ and $\sigma^x\change{V}$ as the \change{\textit{volume}} in equations \eqref{eqn:int_courant}-\eqref{eqn:frac_courant}.
 The outer density step computes the fluxes using reconstructions of $\rho^x_A$ and $\rho^y_A$ as in the COSMIC splitting, but now updates the fields from the inner steps:
 \begin{equation} \label{eqn:swift_density}
-\rho^{n+1} = \frac{1}{2}\left[\rho_I^{y} - \Delta{t}\nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x, \sigma^yV) + \rho_I^x - \Delta{t}\nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y, \sigma^xV)\right].
+\rho^{n+1} = \frac{1}{2}\left[\rho_I^{y} - \Delta{t}\nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x, \sigma^y\change{V}) + \rho_I^x - \Delta{t}\nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y, \sigma^x\change{V})\right].
 \end{equation}
 This essentially combines the fluxes from the inner and outer steps, as
 \begin{equation} \label{eqn:swift_density_2}
 \begin{split}
-\rho^{n+1} \equiv \rho^n & - \frac{\Delta t}{2} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x, V) - \frac{\Delta{t}}{2} \nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x, \sigma^yV) \\
-& - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,V) - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y, \sigma^xV).
+\rho^{n+1} \equiv \rho^n & - \frac{\Delta t}{2} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x, \change{V}) - \frac{\Delta{t}}{2} \nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x, \sigma^y\change{V}) \\
+& - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,\change{V}) - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y, \sigma^x\change{V}).
 \end{split}
 \end{equation}
 The one-dimensional density updates are stored, as are the dry mass fluxes, as both are needed for the SWIFT tracer transport:
 \begin{subequations}
 \begin{align}
-F^x &= \frac{1}{2}\left[ \mathcal{F}^x(\rho^n, u^x,V) +  \mathcal{F}^x(\rho^y_A, u^x, \sigma^yV)\right], \\ 
-F^y &= \frac{1}{2}\left[ \mathcal{F}^y(\rho^n, u^y,V) +  \mathcal{F}^y(\rho^x_A, u^y, \sigma^xV)\right], \\
+F^x &= \frac{1}{2}\left[ \mathcal{F}^x(\rho^n, u^x,\change{V}) +  \mathcal{F}^x(\rho^y_A, u^x, \sigma^y\change{V})\right], \\ 
+F^y &= \frac{1}{2}\left[ \mathcal{F}^y(\rho^n, u^y,\change{V}) +  \mathcal{F}^y(\rho^x_A, u^y, \sigma^x\change{V})\right], \\
 \rho^x &= \rho^{n} - \Delta{t} \nabla_x\cdot F^x, \\
 \rho^y &= \rho^{n} - \Delta{t} \nabla_y\cdot F^y. 
 \end{align}
@@ -542,12 +532,12 @@ The SWIFT splitting is now applied to tracer transport.
 This splitting is designed to preserve the consistency, monotonicity and positivity properties of the one-dimensional calculation, whilst still providing local conservation of the tracer and stability that is not conditional on the Courant number.
 The steps for SWIFT splitting for tracers are as follows. \\
 \\
-First, the departure points and dry mass fluxes are recomputed using $\rho^nV$ and the dry mass fluxes substituted into equations \eqref{eqn:int_courant}-\eqref{eqn:frac_courant} for the first transport step.
+First, the departure points and dry mass fluxes are recomputed using $\rho^n\change{V}$ and the dry mass fluxes \change{substituted into} equations \eqref{eqn:int_courant}-\eqref{eqn:frac_courant} for the first transport step.
 The inner transport step for the tracer is then given by:
 \begin{subequations}
 \begin{align}  \label{eqn:swift_split_1}   
-        (\rho m)^x &= (\rho m)^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n,F^{x},\rho^nV), \\ \label{eqn:swift_split_2}
-        (\rho m)^y &= (\rho m)^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(m^n,F^{y},\rho^nV).
+        (\rho m)^x &= (\rho m)^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n,F^{x},\rho^n\change{V}), \\ \label{eqn:swift_split_2}
+        (\rho m)^y &= (\rho m)^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(m^n,F^{y},\rho^n\change{V}).
 \end{align}
 \end{subequations}
 Updated mixing ratio fields are found by dividing by the conservative densities following one-dimensional transport steps
@@ -561,13 +551,13 @@ The departure points and fractional mass fluxes are recomputed using $\rho^y$ an
 Then the updated tracer density combines fluxes from the inner and outer steps:
 \begin{equation} \label{eqn:swift_tracer}
 \begin{split}
-(\rho m)^{n+1} = (\rho m)^n & -\frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^n,F^{x},\rho^nV) -\frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^y,F^{x},\rho^yV) \\
-        & - \frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^n,F^{y},\rho^nV) -\frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^x,F^{y},\rho^xV).
+(\rho m)^{n+1} = (\rho m)^n & -\frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^n,F^{x},\rho^n\change{V}) -\frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^y,F^{x},\rho^y\change{V}) \\
+        & - \frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^n,F^{y},\rho^n\change{V}) -\frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^x,F^{y},\rho^x\change{V}).
 \end{split}
 \end{equation}
 This can also be written as
 \begin{equation}
-(\rho m)^{n+1} = \frac{1}{2}\left[(\rho m)^y - \Delta t \nabla_x\cdot \mathcal{F}^x(m^y,F^{x},\rho^y, V) + (\rho m)^x - \Delta t \nabla_y\cdot \mathcal{F}^y(m^x,F^{y},\rho^x, V) \right].
+(\rho m)^{n+1} = \frac{1}{2}\left[(\rho m)^y - \Delta t \nabla_x\cdot \mathcal{F}^x(m^y,F^{x},\rho^y, \change{V}) + (\rho m)^x - \Delta t \nabla_y\cdot \mathcal{F}^y(m^x,F^{y},\rho^x, \change{V}) \right].
 \end{equation}
 The tracer mixing ratio at the end of the time step is then computed from the tracer density and the dry density
 \begin{equation}
@@ -578,17 +568,17 @@ The tracer mixing ratio at the end of the time step is then computed from the tr
 
 The SWIFT splitting can also be applied to a mixing ratio that is solved advectively, in the form of \eqref{eqn:advective_transport}. Note that mixing ratios solved this way will not be conservative or consistent with the dry density. \\ 
 \\
-For the advective form of SWIFT splitting we follow the steps given in Section \ref{sec:swift_density} but replace $\rho$ with the mixing ratio $m$. The final step is to then divide through by unity transported for a whole time step
+For the advective form of SWIFT splitting we follow the steps given in Section \ref{sec:swift_splitting}\ref{sec:swift_density} but replace $\rho$ with the mixing ratio $m$. The final step is to then divide through by unity transported for a whole time step
 \begin{equation}
 \begin{split}
-(\sigma m)^{n+1} = m^{n} & - \frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^n, u^x, V) - \frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^y_A, u^x, \sigma^yV) \\
-& - \frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^n, u^y, V) - \frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^x_A, u^y, \sigma^xV),
+(\sigma m)^{n+1} = m^{n} & - \frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^n, u^x, \change{V}) - \frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^y_A, u^x, \sigma^y\change{V}) \\
+& - \frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^n, u^y, \change{V}) - \frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^x_A, u^y, \sigma^x\change{V}),
 \end{split}
 \end{equation}
 where
 \begin{align}
-    m^x_A &= (m^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n, u^x, V)) / \sigma^x, \\
-    m^y_A &= (m^n - \Delta{t} \nabla_y\cdot \mathcal{F}^y(m^n, u^y, V)) / \sigma^y.
+    m^x_A &= (m^n - \Delta{t} \nabla_x\cdot \change{\mathcal{F}}^x(m^n, u^x, \change{V})) / \sigma^x, \\
+    m^y_A &= (m^n - \Delta{t} \nabla_y\cdot \change{\mathcal{F}}^y(m^n, u^y, \change{V})) / \sigma^y.
 \end{align}
 The updated mixing ratio is then found from
 \begin{equation}
@@ -596,39 +586,40 @@ m^{n+1} = (\sigma m)^{n+1}/\sigma^{n+1},
 \end{equation}
 where $\sigma^{n+1}$ is calculated from
 \begin{equation}
-\sigma^{n+1} = \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma, u^x, V) -  \nabla_y \cdot \mathcal{F}^y(\sigma, u^y, V).
+\sigma^{n+1} = \sigma - \Delta{t} \nabla_x\cdot \mathcal{F}^x(\sigma, u^x, \change{V}) -  \nabla_y \cdot \mathcal{F}^y(\sigma, u^y, \change{V}).
 \end{equation}
-This approach is also equivalent to the conservative tracer transport scheme of Section \ref{sec:swift_tracer}, but with $\rho$ replaced by $\sigma$.
+This approach is also equivalent to the conservative tracer transport scheme of Section \ref{sec:swift_splitting}\ref{sec:swift_tracer}, but with $\rho$ replaced by $\sigma$.
 
 \subsection{Analysis of SWIFT Splitting}
 
 This section demonstrates how the SWIFT splitting ensures consistency between tracers and density, how the monotonicity or positivity properties of the one-dimensional scheme are achieved for the two-dimensional splitting, and how the SWIFT splitting is similar to other well-known splitting techniques. 
 
-\subsubsection{Divergence-Linearity}
-The SWIFT splitting for density transport presented in Section \ref{sec:swift_density}
+\subsubsection{\change{Divergence-Linearity}}
+
+\change{The SWIFT splitting for density transport presented in Section \ref{sec:swift_splitting}\ref{sec:swift_density}
 provides increments that are linear in the divergence.
 This can be seen by inserting $\rho^n=K$ for constant $K$ into \eqref{eqn:swift_density_inner}, which when combined with \eqref{eqn:sigma_x_sigma_y} returns densities for the outer step of $\rho_A^x=K$ and $\rho_A^y=K$.
 These values can then be substituted into \eqref{eqn:swift_density}.
-Using the property discussed in Section \ref{sec:ffsl_flux_integral} that when the density is constant, the mass flux is proportional to the wind field, the resulting density is
+Using the property discussed in part \ref{sec:ffsl_flux_integral} of Section \ref{sec:ffsl}\ref{sec:1d_ffsl} that when the density is constant, the mass flux is proportional to the wind field, the resulting density is
 \begin{equation}
 \rho^{n+1} = K(1-\Delta t \bm{\nabla\cdot u}).
 \end{equation}
-Thus, the increment to the field is linear in the divergence, and a constant density is preserved under divergence-free flow.
+Thus, the increment to the field is linear in the divergence, and a constant density is preserved under divergence-free flow.}
 
 \subsubsection{Consistency}
 
 The SWIFT scheme is consistent as it preserves a constant mixing ratio. Let $m=K$ be constant and assume that the dry density $\rho$ is positive-definite. The inner stage horizontal fluxes are equal to the constant multiplied by the dry flux
 \begin{subequations}
 \begin{align}   
-   \mathcal{F}^x(m^n,F^{x},\rho^nV) &= K F^x, \\
-   \mathcal{F}^y(m^n,F^{y},\rho^nV) &= K F^y,
+   \mathcal{F}^x(m^n,F^{x},\rho^n\change{V}) &= K F^x, \\
+   \mathcal{F}^y(m^n,F^{y},\rho^n\change{V}) &= K F^y,
 \end{align}
 \end{subequations}
 so the first stage updates are
 \begin{subequations}
 \begin{align}        
-    (\rho m)^x &=\rho^n K - \Delta{t} \nabla_x\cdot \mathcal{F}^x(K,F^{x},\rho^nV) = \rho^n K - \Delta{t} K \nabla_x\cdot F^x = K \rho^x, \\
-    (\rho m)^y &=\rho^n K - \Delta{t} \nabla_y\cdot \mathcal{F}^y(K,F^{y},\rho^nV) = \rho^n K - \Delta{t} K \nabla_y\cdot F^y = K \rho^y, \\
+    (\rho m)^x &=\rho^n K - \Delta{t} \nabla_x\cdot \mathcal{F}^x(K,F^{x},\rho^n\change{V}) = \rho^n K - \Delta{t} K \nabla_x\cdot F^x = K \rho^x, \\
+    (\rho m)^y &=\rho^n K - \Delta{t} \nabla_y\cdot \mathcal{F}^y(K,F^{y},\rho^n\change{V}) = \rho^n K - \Delta{t} K \nabla_y\cdot F^y = K \rho^y, \\
     \Rightarrow m^x &= (\rho m)^x / \rho^x = K, \\
     \Rightarrow m^y &= (\rho m)^y / \rho^y = K.
 \end{align}
@@ -636,8 +627,8 @@ so the first stage updates are
 The outer stage fluxes, using the recomputed dry mass fluxes from $\rho^y$ and $\rho^x$, are
 \begin{subequations}
 \begin{align}
-    \mathcal{F}^x(m^y,F^{x},\rho^yV) & = K F^x, \\
-    \mathcal{F}^y(m^x,F^{y},\rho^xV) & = K F^y,
+    \mathcal{F}^x(m^y,F^{x},\rho^y\change{V}) & = K F^x, \\
+    \mathcal{F}^y(m^x,F^{y},\rho^x\change{V}) & = K F^y,
 \end{align}
 \end{subequations}
  and hence the update of the tracer is
@@ -652,7 +643,7 @@ and the constant tracer is preserved.
 \subsubsection{Multi-dimensional Monotonicity Properties of One-Dimensional Schemes}
 Consider the one-dimensional schemes in Section \ref{sec:ffsl} with the application of a monotonic or positive-definite limiter. The one-dimensional solution is monotonic or positive-definite provided the input to the fluxes is the same as the field being transported. For a consistent tracer transport example, a monotonic scheme used to compute the fluxes in
 \begin{equation} \label{eqn:mono_condition}
-    (\rho m)^{n+1} = (\rho m)^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n, F^x, \rho^nV), 
+    (\rho m)^{n+1} = (\rho m)^n - \Delta{t} \nabla_x\cdot \mathcal{F}^x(m^n, F^x, \rho^n\change{V}), 
 \end{equation}
 will produce a shape-preserving solution for $(\rho m)$, and hence a monotonic solution for $m$. The same holds for a positive-definite limiter and positivity.
 Crucially, the arguments $m^n$ and $\rho^n$ to the flux operator $\mathcal{F}^x$ must be the same mixing ratio and density that are being updated. \\
@@ -663,7 +654,7 @@ The SWIFT splitting is designed to ensure multi-dimensional monotonicity when on
 \\
 From \eqref{eqn:swift_tracer} the outer SWIFT step is written in the required form:
 \begin{equation}
-    (\rho m)^{n+1}  = \frac{1}{2}(\rho m)^x  -\frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^x,F^{y},\rho^xV) +  \frac{1}{2}(\rho m)^y - \frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^y,F^{x},\rho^yV). \label{eqn:swift_is_monotonic}
+    (\rho m)^{n+1}  = \frac{1}{2}(\rho m)^x  -\frac{\Delta{t}}{2}\nabla_y\cdot \mathcal{F}^y(m^x,F^{y},\rho^x\change{V}) +  \frac{1}{2}(\rho m)^y - \frac{\Delta{t}}{2}\nabla_x\cdot \mathcal{F}^x(m^y,F^{x},\rho^y\change{V}). \label{eqn:swift_is_monotonic}
 \end{equation}
 As the departure points in the outer step have been recomputed using $\rho^x$ and $\rho^y$, this is in the form of \eqref{eqn:mono_condition}.
 Equation \eqref{eqn:swift_is_monotonic} shows that the final mixing ratio field comes from the average of two updates of the form \eqref{eqn:mono_condition}.
@@ -678,21 +669,21 @@ and similarly for the step in the $y$-direction.
 If no monotonic or positive-definite limiter is used, the flux operator $\mathcal{F}$ is linear in its first argument and the COSMIC splitting from \eqref{eqn:cosmic_density} can be rewritten in terms of the quantities used in the SWIFT splitting to give:
 \begin{equation} \label{eqn:cosmic_linear}
 \begin{split}
-\rho^{n+1} = \rho^n & - \frac{\Delta t}{2} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x,V) - \frac{\Delta{t}}{2} \nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x,V) \\
-& - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,V) - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y,V).
+\rho^{n+1} = \rho^n & - \frac{\Delta t}{2} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x,\change{V}) - \frac{\Delta{t}}{2} \nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x,\change{V}) \\
+& - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,\change{V}) - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y,\change{V}).
 \end{split}
 \end{equation}
-This can be compared directly with the transport of density using SWIFT, and so repeating \eqref{eqn:swift_density_2} here
+\change{This can be compared directly with the transport of density using SWIFT, and so repeating \eqref{eqn:swift_density_2} here
 \begin{equation}
 \begin{split}
-\rho^{n+1} \equiv \rho^n & - \frac{\Delta t}{2} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x, V) - \frac{\Delta{t}}{2} \nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x, \sigma^yV) \\
-& - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,V) - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y, \sigma^xV),
+\rho^{n+1} \equiv \rho^n & - \frac{\Delta t}{2} \nabla_x\cdot \mathcal{F}^x(\rho^n, u^x, \change{V}) - \frac{\Delta{t}}{2} \nabla_x\cdot \mathcal{F}^x(\rho^y_A, u^x, \sigma^y\change{V}) \\
+& - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^n, u^y,\change{V}) - \frac{\Delta{t}}{2} \nabla_y\cdot \mathcal{F}^y(\rho^x_A, u^y, \sigma^x\change{V}),
 \end{split}
-\end{equation}
+\end{equation}}
 reveals that, in the absence of a limiter, the COSMIC and SWIFT splittings differ through the inclusion of $\sigma^x$ and $\sigma^y$ arguments for the outer flux evaluations and thus the computation of the departure points for the outer step.
 \\
 \\
-A corollary of this is that if the transporting velocity field is constant in space, then the COSMIC splitting of Section \ref{sec:cosmic_density} and the SWIFT splitting of Section \ref{sec:swift_density} for density are equivalent.
+A corollary of this is that if the transporting velocity field is constant in space, then the COSMIC splitting of part \ref{sec:cosmic_density} of Section \ref{sec:ffsl}\ref{sec:cosmic} and the SWIFT splitting of Section \ref{sec:swift_splitting}\ref{sec:swift_density} for density are equivalent.
 This can be seen by noting that $\sigma^x=\sigma^y=1$ if the flow is constant. \\
 \\
 A consequence of the equivalence of these schemes under constant flow is that the stability analysis of SWIFT for density fields also reduces to that of COSMIC, since standard stability analysis requires the scheme to be applied to a linear problem.
@@ -710,9 +701,9 @@ In an MPI parallelisation with a domain partitioning, both splittings require th
 
 \section{Two-Dimensional Results} \label{sec:results2d}
 
-We test the SWIFT splitting by running a number of prescribed velocity transport tests on the doubly-periodic plane with $x$ and $y$ ranging from $-0.5$ km to $0.5$ km, and comparing with COSMIC splitting. For each test we use PPM as the one-dimensional scheme, and where noted use the strict limiting. For each test the density $\rho$ is computed using the same splitting as the tracer $m$.
+We test the SWIFT splitting by running a number of prescribed velocity transport tests on the doubly-periodic plane \change{with $x$ and $y$ ranging from $-0.5$ km to $0.5$ km}, and comparing with COSMIC splitting. For each test we use PPM as the one-dimensional scheme, and where noted use the strict limiting. For each test the density $\rho$ is computed using the same splitting as the tracer $m$.
 All tracers are transported conservatively, have an initial minimum of 0 and maximum of 1.
-The setup of the test cases is given in Appendix B, but in all tests the scalar fields are transported once around the domain so that the analytic final solutions are equal to their initial values.
+The setup of the test cases is given in Appendix B, \change{but in all tests the scalar fields are transported once around the domain so that the analytic final solutions are equal to their initial values.}
 Throughout the results it is demonstrated that at small Courant numbers, the behaviour of the SWIFT and COSMIC splittings are very similar and so SWIFT retains the benefits of the COSMIC splitting. However at large Courant numbers, the COSMIC splitting does not maintain monotonicity when a limiter is used, while the SWIFT splitting does.
 
 \subsection{Constant Velocity Test} \label{sec:test1}
@@ -746,7 +737,7 @@ The mixing ratio $m$ has no limiter applied, while $m^L$ uses the limiter of App
 \end{center}
 \end{table}
 \\
-Statistics from the end of these simulations (at $t=100$ s) are shown in Table \ref{table:test1}.
+Statistics from the end of these simulations (at \change{$t=100$} s) are shown in Table \ref{table:test1}.
 The ``Min'' and ``Max'' columns give the instantaneous minima and maxima of the transported fields at the end of the final time step.
 The tracer field has an initial minimum of 0 and an initial maximum of 1, while the spatially-varying density has an initial minimum of 0.6 and an initial maximum of 1.
 The ``$L^2$ error'' column describes the normalised $L^2$ error, which is given by $||q - q_{true}||/||q_{true}||$ for transported field $q$ and analytic solution $q_{true}$.
@@ -764,7 +755,7 @@ For all variables, the SWIFT error norms are of similar magnitude to those with 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.9\textwidth]{fig_2_const_wind.jpg}
-\caption{The final transported fields from the constant velocity test of Section \ref{sec:test1}, using a spatially-varying density. These fields are taken from the large Courant number case, with $\Delta t=2$ s. The top row shows fields transported with the COSMIC splitting, while the bottom row contains fields transported with the SWIFT splitting.
+\caption{The final transported fields from the constant velocity test of Section \ref{sec:results2d}\ref{sec:test1}, using a spatially-varying density. These fields are taken from the large Courant number case, with $\Delta t=2$ s. The top row shows fields transported with the COSMIC splitting, while the bottom row contains fields transported with the SWIFT splitting.
 For the density field $\rho$ (left column) the two splittings give the same result.
 The central column displays a conservative mixing ratio, with no limiter applied.
 The limited tracer (right column) is monotonic with the SWIFT splitting but not with the COSMIC splitting.
@@ -780,7 +771,7 @@ The two different time steps were again $\Delta t=0.2$ s and $2$ s, which gave m
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=0.9\textwidth]{fig_3_deformational.jpg}
-\caption{The transported fields at the end of the final time step ($t=100$ s) of the non-divergent deformational test of Section \ref{sec:test2} with a constant density. These fields are taken from the large Courant number case, with $\Delta t=2$ s. Different rows show the fields transported with the COSMIC splitting and SWIFT splittings.
+\caption{The transported fields at the end of the final time step (\change{$t=100$} s) of the non-divergent deformational test of Section \ref{sec:results2d}\ref{sec:test2} with a constant density. These fields are taken from the large Courant number case, with $\Delta t=2$ s. Different rows show the fields transported with the COSMIC splitting and SWIFT splittings.
 The mixing ratio fields have contours every $0.1$ kg kg$^{-1}$, omitting the zero contour.
 Arrows on the density plots show the direction and magnitude of the transporting velocity.}\label{fig:test2constrho}
 \end{figure} \\
@@ -789,7 +780,7 @@ Figure \ref{fig:test2constrho} shows the fields at the end of the final time ste
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=0.78\textwidth]{fig_4_deformational.jpg}
-\caption{The transported fields at the halfway point ($t=50$ s, top two rows) and at the end of the final time step ($t=100$ s, bottom two rows) of the non-divergent deformational test of Section \ref{sec:test2}. These fields are taken from the large Courant number case, with $\Delta t=2$ s. Different rows show the fields transported with the COSMIC splitting and SWIFT splittings.
+\caption{The transported fields at the halfway point (\change{$t=50$} s, top two rows) and at the end of the final time step (\change{$t=100$} s, bottom two rows) of the non-divergent deformational test of Section \ref{sec:results2d}\ref{sec:test2}. These fields are taken from the large Courant number case, with $\Delta t=2$ s. Different rows show the fields transported with the COSMIC splitting and SWIFT splittings.
 Even under strong deformation, the limited tracer with the SWIFT splitting remains monotonic.
 The density fields are contoured at intervals of $0.05$ kg m$^{-3}$, with the $0.8$ kg m$^{-3}$ contour omitted.
 The mixing ratio fields have contours every $0.1$ kg kg$^{-1}$, omitting the zero contour.
@@ -826,11 +817,11 @@ As with the previous two tests, this was run with two different time steps: $\De
 \\
 Table \ref{table:test3} contains results from this test.
 The table is structured in the same way as Tables \ref{table:test1} and \ref{table:test2}, and demonstrates that with divergent flow the SWIFT splitting still maintains monotonicity properties, while error norms are again comparable with those of the COSMIC splitting.
-Fields at $t=50$ s and $t=100$ s from the large Courant number case are plotted in Figure \ref{fig:test3}. \\
+Fields at \change{$t=50$} s and \change{$t=100$} s from the large Courant number case are plotted in Figure \ref{fig:test3}. \\
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=0.78\textwidth]{fig_5_divergent.jpg}
-\caption{The transported fields at the halfway point ($t=50$ s, top two rows) and end of the final time step ($t=100$ s, bottom two rows) of the divergent test of Section \ref{sec:test2}. These fields are taken from the large Courant number case, with $\Delta t=2$ s. Different rows show the COSMIC and SWIFT splittings.
+\caption{The transported fields at the halfway point (\change{$t=50$} s, top two rows) and end of the final time step (\change{$t=100$} s, bottom two rows) of the divergent test of Section \ref{sec:results2d}\ref{sec:test2}. These fields are taken from the large Courant number case, with $\Delta t=2$ s. Different rows show the COSMIC and SWIFT splittings.
 The density fields are contoured at intervals of $0.05$ kg m$^{-3}$, with the $0.8$ kg m$^{-3}$ contour omitted.
 The mixing ratio fields have contours every $0.1$ kg kg$^{-1}$, omitting the zero contour.
 Arrows on the density plots show the direction and magnitude of the transporting velocity.}\label{fig:test3}
@@ -856,17 +847,17 @@ The mixing ratio $m$ has no limiter applied, while $m^L$ uses the limiter of App
 \end{table}
 
 \subsection{Convergence Tests} \label{sec:convergence}
-The test cases of Sections \ref{sec:test1}-\ref{sec:test3} were used to explore the convergence properties of the schemes presented here.
+The test cases of Sections \ref{sec:results2d}\ref{sec:test1}-\ref{sec:results2d}\ref{sec:test3} were used to explore the convergence properties of the schemes presented here.
 For all convergence tests, the initial tracer fields took the sinusoidal profiles described in Appendix B. \\
 \\
 We investigated the convergence of the schemes in different regimes.
-Using the constant velocity test of Section \ref{sec:test1} and the non-divergent deformation test of \ref{sec:test2}, the relative $L^2$ error norm was measured at different spatial resolutions whilst holding the Courant number constant (by also varying the time step).
+Using the constant velocity test of Section \ref{sec:results2d}\ref{sec:test1} and the non-divergent deformation test of \ref{sec:results2d}\ref{sec:test2}, the relative $L^2$ error norm was measured at different spatial resolutions whilst holding the Courant number constant (by also varying the time step).
 This was done for two different maximum Courant numbers ($0.256$ and $2.56$ for test 1, $0.6$ and $6$ for test 2) and on grids with $64^2$, $128^2$, $256^2$ and $512^2$ cells.
 Convergence rates for different variables are shown in Table \ref{table:convergence_const_c}.
 All convergence rates are determined by fitting a line of best fit between the logarithm of the grid spacing and the relative $L^2$ error.
 For the constant velocity (test 1), the convergence rates for the density field and for the tracer field transported relative to a constant density achieve the theoretical third-order values (for the unlimited case).
 However when the density is spatially-varying, the tracer field has a second-order convergence rate for both the COSMIC and SWIFT splittings.
-We believe that this is because the departure displacement calculation of \eqref{eqn:frac_courant} for the transport of tracers corresponds to an assumption that the density is constant within a cell.
+We believe that this is because the departure displacement calculation of \eqref{eqn:frac_courant} \change{for the transport of tracers} corresponds to an assumption that the density is constant within a cell.
 Future work will investigate the impact of using a higher-order subgrid reconstruction of the density to compute the departure displacements.
 For the deformational velocity (test 2) with large maximum Courant number, the convergence rates are all approximately second-order. This is because at large Courant numbers with non-constant velocity, the second-order splitting error of the COSMIC and SWIFT splitting dominates. 
 \\
@@ -890,7 +881,7 @@ For the deformational velocity (test 2) with large maximum Courant number, the c
   & COSMIC $m^L$ & 1.46 & 1.99 & 1.80 & 1.99 \\
   & SWIFT $m^L$ & 1.38 & 1.99 & 1.84 & 1.96 \\ \hline
 \end{tabular}
-\caption{The convergence rate of the $L^2$ error with grid spacing, holding the Courant number constant. Errors were measured using the constant velocity test of Section \ref{sec:test1} and the non-divergent deformation test of \ref{sec:test2}, with two different Courant numbers.
+\caption{The convergence rate of the $L^2$ error with grid spacing, holding the Courant number constant. Errors were measured using the constant velocity test of Section \ref{sec:results2d}\ref{sec:test1} and the non-divergent deformation test of \ref{sec:results2d}\ref{sec:test2}, with two different Courant numbers.
 The top half of the table gives convergence rates for conservative tracers using a constant density, and the bottom half gives convergence rates for the varying density tests.}
 \label{table:convergence_const_c}
 \end{center}
@@ -905,7 +896,7 @@ Both COSMIC and SWIFT have very similar error norms at these Courant numbers.
 \centering
 \includegraphics[width=\textwidth]{fig_6_convergence.jpg}
 \caption{The $L^2$ errors in transporting the unlimited tracer mixing ratio, as a function of grid spacing $\Delta x$, whilst keeping $\Delta t$ constant.
-Different plots correspond to the different transporting winds described of Section \ref{sec:convergence}.
+Different plots correspond to the different transporting winds described of Section \ref{sec:results2d}\ref{sec:convergence}.
 The legends give the convergence rates, and demonstrate that the error norms for the COSMIC and SWIFT splittings are very similar.
 }
 \label{fig:convergence_const_dt}
@@ -923,17 +914,17 @@ This section will demonstrate how to use the Strang splitting in the vertical wi
 
 \subsubsection{Three-Dimensional SWIFT for Density} \label{sec:3D_density}
 The first stage is a half step in the vertical.
-The corresponding flux calculations use a time step of $\Delta t/2$, and the flux operator is denoted by $\mathcal{F}^{z/2}$.
+\change{The corresponding flux calculations use a time step of $\Delta t/2$, and the flux operator is denoted by $\mathcal{F}^{z/2}$}.
 \\
 \\
 The three-dimensional density transport scheme consists of the following steps:
 \begin{subequations}
 \begin{align}
-\rho^z & = \rho^n - \tfrac{\Delta t}{2}\nabla_z \cdot \mathcal{F}^{z/2}\left(\rho^n, u^z, V \right), \\
-\rho_I^x & = \rho^z - \Delta t \nabla_x \cdot \mathcal{F}^x\left(\rho^z_A, u^x, \sigma^z V \right), \\
-\rho_I^y & = \rho^z - \Delta t \nabla_y \cdot \mathcal{F}^y\left(\rho^z_A, u^y, \sigma^z V \right), \\
-\rho^{xy} & = \frac{1}{2}\left[\rho_I^x - \Delta t \nabla_y \cdot \mathcal{F}^y\left(\rho^x_A, u^y, \sigma^xV \right) + \rho_I^y - \Delta t \nabla_x \cdot \mathcal{F}^x\left(\rho_A^y, u^x,\sigma^yV\right)\right], \\
-\rho^{n+1} & = \rho^{xy} - \tfrac{\Delta t}{2}\nabla_z\cdot\mathcal{F}^{z/2}\left(\rho_A^{xy},u^z,\sigma^{xy}V \right),
+\rho^z & = \rho^n - \tfrac{\Delta t}{2}\nabla_z \cdot \mathcal{F}^{z\change{/2}}\left(\rho^n, u^z, \change{V} \right), \\
+\rho_I^x & = \rho^z - \Delta t \nabla_x \cdot \mathcal{F}^x\left(\rho^z_A, u^x, \change{\sigma^z}\change{V} \right), \\
+\rho_I^y & = \rho^z - \Delta t \nabla_y \cdot \mathcal{F}^y\left(\rho^z_A, u^y, \change{\sigma^z}\change{V} \right), \\
+\rho^{xy} & = \frac{1}{2}\left[\rho_I^x - \Delta t \nabla_y \cdot \mathcal{F}^y\left(\rho^x_A, u^y, \sigma^x\change{V} \right) + \rho_I^y - \Delta t \nabla_x \cdot \mathcal{F}^x\left(\rho_A^y, u^x,\sigma^y\change{V}\right)\right], \\
+\rho^{n+1} & = \rho^{xy} - \tfrac{\Delta t}{2}\nabla_z\cdot\mathcal{F}^{z\change{/2}}\left(\rho_A^{xy},u^z,\change{\sigma^{xy}V} \right),
 \end{align}
 \end{subequations}
 where the densities with subscript $A$ are of advective form, and are given by:
@@ -943,13 +934,13 @@ where the densities with subscript $A$ are of advective form, and are given by:
 \rho^y_A = \rho_I^y / \sigma^y, \quad
 \rho^{xy}_A = \rho^{xy} / \sigma^{xy},
 \end{equation}
-where the transported unity fields are given by
+\change{where the transported unity fields are given by}
 \begin{subequations}
 \begin{align}
-\sigma^z & = \sigma - \frac{\Delta t}{2} \nabla_z \cdot \mathcal{F}^{z/2}(\sigma,u^z,V), \\
-\sigma^x & = \sigma^z - \Delta{t} \nabla_x \cdot \mathcal{F}^x(\sigma,u^x,V), \\
-\sigma^y & = \sigma^z - \Delta{t} \nabla_y \cdot \mathcal{F}^y(\sigma,u^y,V), \\
-\sigma^{xy} & = \sigma^z - \Delta{t} \nabla_x \cdot \mathcal{F}^x(\sigma,u^x,V) - \Delta{t} \nabla_y \cdot \mathcal{F}^y(\sigma,u^y,V).
+\sigma^z & = \sigma - \change{\frac{\Delta t}{2}} \nabla_z \cdot \mathcal{F}^{z\change{/2}}(\sigma,u^z,\change{V}), \\
+\change{\sigma^x} & \change{= \sigma^z - \Delta{t} \nabla_x \cdot \mathcal{F}^x(\sigma,u^x,\change{V}),} \\
+\change{\sigma^y} & \change{= \sigma^z - \Delta{t} \nabla_y \cdot \mathcal{F}^y(\sigma,u^y,\change{V})}, \\
+\sigma^{xy} & = \sigma^z - \Delta{t} \nabla_x \cdot \mathcal{F}^x(\sigma,u^x,\change{V}) - \Delta{t} \nabla_y \cdot \mathcal{F}^y(\sigma,u^y,\change{V}).
 \end{align}
 \end{subequations}
 The updated density at the end of the time step can be written as the divergence of fluxes:
@@ -959,10 +950,10 @@ The updated density at the end of the time step can be written as the divergence
 where
 \begin{subequations}
 \begin{align}
-F_1^z & = \mathcal{F}^{z/2}(\rho^n,u^z,V), \\
-F_2^z & = \mathcal{F}^{z/2}(\rho^{xy}_A,u^z,V), \\
-F^x & = \left[ \mathcal{F}^x(\rho_A^z, u^x, V) + \mathcal{F}^x(\rho^y_A, u^x, \sigma^yV) \right]/2, \\
-F^y & = \left[ \mathcal{F}^y(\rho_A^z, u^y, V) + \mathcal{F}^y(\rho^x_A, u^y, \sigma^xV)\right]/2.
+F_1^z & = \mathcal{F}^{z\change{/2}}(\rho^n,u^z,\change{V}), \\
+F_2^z & = \mathcal{F}^{z\change{/2}}(\rho^{xy}_A,u^z,\change{V}), \\
+F^x & = \left[ \mathcal{F}^x(\rho_A^z, u^x, \change{V}) + \mathcal{F}^x(\rho^y_A, u^x, \sigma^y\change{V}) \right]/2, \\
+F^y & = \left[ \mathcal{F}^y(\rho_A^z, u^y, \change{V}) + \mathcal{F}^y(\rho^x_A, u^y, \sigma^x\change{V})\right]/2.
 \end{align}
 \end{subequations}
 As before, intermediate densities are defined for use in tracer transport:
@@ -974,14 +965,14 @@ If $\rho$ is initially a constant, over a whole time step the increment will be 
 
 \subsubsection{Three-Dimensional SWIFT for Tracers}
 A three-dimensional conservative scheme for tracers can then be assembled, using Strang splitting between the vertical and horizontal directions and the SWIFT splitting for the horizontal step.
-Using variables computed in Section \ref{sec:3D_density}, the scheme can be written as:
+Using variables computed in part \ref{sec:3D_density} of Section \ref{sec:3D_CP}\ref{sec:3D}, the scheme can be written as:
 \begin{subequations}
 \begin{align}
-(\rho m)^z & = (\rho m)^n - \tfrac{\Delta t}{2}\nabla_z \cdot \mathcal{F}^{z/2}\left(m^n, F^z_1, \rho^nV\right), \\
-(\rho m)^x & = (\rho m)^z - \Delta t \nabla_x \cdot \mathcal{F}^x\left(m^z, F^x, \rho^zV \right), \\
-(\rho m)^y & = (\rho m)^z - \Delta t \nabla_y \cdot \mathcal{F}^y\left(m^z, F^y, \rho^zV \right), \\
-(\rho m)^{xy} & = \frac{1}{2}\left[(\rho m)^x - \Delta t \nabla_y \cdot \mathcal{F}^y\left(m^x, F^y, \rho^xV \right) + (\rho m)^y - \Delta t \nabla_x \cdot \mathcal{F}^x\left(m^y, F^x,\rho^yV\right)\right], \\
-(\rho m)^{n+1} & = (\rho m)^{xy} - \tfrac{\Delta t}{2}\nabla_z\cdot\mathcal{F}^{z/2}\left(m^{xy},F_2^z,\rho^{xy}V\right),
+(\rho m)^z & = (\rho m)^n - \tfrac{\Delta t}{2}\nabla_z \cdot \mathcal{F}^{z\change{/2}}\left(m^n, F^z_1, \change{\rho^n}\change{V}\right), \\
+(\rho m)^x & = (\rho m)^z - \Delta t \nabla_x \cdot \mathcal{F}^x\left(m^z, F^x, \rho^z\change{V} \right), \\
+(\rho m)^y & = (\rho m)^z - \Delta t \nabla_y \cdot \mathcal{F}^y\left(m^z, F^y, \rho^z\change{V} \right), \\
+(\rho m)^{xy} & = \frac{1}{2}\left[(\rho m)^x - \Delta t \nabla_y \cdot \mathcal{F}^y\left(m^x, F^y, \rho^x\change{V} \right) + (\rho m)^y - \Delta t \nabla_x \cdot \mathcal{F}^x\left(m^y, F^x,\rho^y\change{V}\right)\right], \\
+(\rho m)^{n+1} & = (\rho m)^{xy} - \tfrac{\Delta t}{2}\nabla_z\cdot\mathcal{F}^{z\change{/2}}\left(m^{xy},F_2^z,\rho^{xy}\change{V}\right),
 \end{align}
 \end{subequations}
 where $m^x$, $m^y$, $m^z$ and $m_{xy}$ are all found through dividing by the corresponding density fields.
@@ -1027,15 +1018,15 @@ The tracer mass in the $i$-th cell on the shifted mesh is given by
 where $\widetilde{V}_i$ is the volume of the shifted mesh cell.
 Conservative tracer transport therefore conserves the mass that is the global sum of this quantity, whilst solving a transport equation like \eqref{eqn:tracer_conservative} ensures that this mass is locally-conserved.
 There are three extra ingredients to obtain the consistency property.
-Firstly, as in Sections \ref{sec:consistent_ffsl_1d}  and \ref{sec:swift_tracer} of this paper, the flux that was used in the transport of $\rho$ must be re-used in the transport of the tracer (but on the shifted mesh).
+Firstly, as in Sections \ref{sec:ffsl}\ref{sec:consistent_ffsl_1d}  and \ref{sec:swift_splitting}\ref{sec:swift_tracer} of this paper, the flux that was used in the transport of $\rho$ must be re-used in the transport of the tracer (but on the shifted mesh).
 Secondly, the operators to remap fields from the primary mesh to the shifted mesh should satisfy some particular conditions given in \citet{bendall2023solution}, which guarantee that the processes of transporting a density and converting it to the shifted mesh commute with one another.
 In this work, we therefore use the remapping operators presented in \citet{bendall2023solution}, with one amendment: to avoid generating new extrema in the top and bottom half-layers, the transformation between $m$ on the primary and shifted meshes is simply the identity matrix, rather than performing interpolation/extrapolation at the domain boundaries.
 Finally, the operator to evaluate the flux should satisfy:
 \begin{equation}
-\mathcal{F}(K,F,\rho V) = KF,
+\mathcal{F}(K,F,\rho\change{V}) = KF,
 \end{equation}
 when the tracer mixing ratio is a constant $K$.
-As described in Section \ref{sec:consistent_ffsl_1d}, the tracer fluxes in this work do satisfy this property, which ensures that the transport of $m$ will be consistent despite the Charney-Phillips staggering.
+As described in Section \ref{sec:ffsl}\ref{sec:consistent_ffsl_1d}, the tracer fluxes in this work do satisfy this property, which ensures that the transport of $m$ will be consistent despite the Charney-Phillips staggering.
 
 \subsection{Three-Dimensional Results} \label{sec:results3d}
 To demonstrate the performance of SWIFT in three-dimensions we use the three-dimensional deformational test of \cite{skamarock2006limiters} with an added background velocity in the horizontal (see Appendix B). The domain is doubly periodic in the horizontal, with zero flux boundaries at the model top and bottom. The tests are performed on the $64\times64\times64$ grid, with step function initial tracers and a smooth density field. We consider two tracers, $m_c$ co-located with $\rho$ and $m_s$ vertically-staggered with $\rho$.\\
@@ -1064,7 +1055,7 @@ SWIFT $m^L_s$ &  0.000 & 1.000 & 2.16$\times 10^{-1}$ & 0.000 &  1.000 & 1.77$\t
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=0.9\textwidth]{fig_8_three_dimensional.jpg}
-\caption{Slices along the $x$-$z$ plane of transported fields from the three-dimensional transport test of Section \ref{sec:results3d}. These fields are taken from the large Courant number case, with $\Delta t=2.5$ s. The top row shows fields transported with the COSMIC splitting, while the bottom row contains fields transported with the SWIFT splitting.
+\caption{Slices along the $x$-$z$ plane of transported fields from the three-dimensional transport test of Section \ref{sec:3D_CP}\ref{sec:results3d}. These fields are taken from the large Courant number case, with $\Delta t=2.5$ s. The top row shows fields transported with the COSMIC splitting, while the bottom row contains fields transported with the SWIFT splitting.
 Mixing ratios are vertically-staggered from the density field, demonstrating that the splitting performs as expected on the Charney-Phillips grid.
 The density fields are contoured at intervals of $0.05$ kg m$^{-3}$.
 The mixing ratio fields have contours every $0.1$ kg kg$^{-1}$, omitting the zero contour.}
@@ -1097,18 +1088,46 @@ The benefits of the scheme presented here have seen it become a candidate for th
 In future work, we will describe how this scheme can be applied to spherical geometries, and in particular cubed-sphere meshes.
 This scheme can also be combined with the work of \citet{thuburn2022numerical} to achieve entropy conservation on the Charney-Phillips grid, or with the approach of \citet{brown2024physics} to transport tracers which are expressed on a coarser mesh than that used by the dynamical core.
 
-\section*{Acknowledgements}
-The authors would like to acknowledge the frequent discussions with Mohamed Zerroukat, Ben Shipway, Thomas Melvin and Nigel Wood which contributed to shaping this work, and for their feedback on early drafts of the manuscript. The authors are grateful to Hilary Weller whose suggestions helped improve the manuscript, and also to Lucas Harris and the two anonymous referees for their reviews which led to an improved text.
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ACKNOWLEDGMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\acknowledgments
+%  Keep acknowledgments (note correct spelling: no ``e'' between the ``g'' and
+% ``m'') as brief as possible. In general, acknowledge only direct help in
+%  writing or research. Financial support (e.g., grant numbers) for the work done, 
+%  for an author, or for the laboratory where the work was performed must be 
+%  acknowledged here rather than as footnotes to the title or to an author's name.
+%  Contribution numbers (if the work has been published by the author's institution 
+%  or organization) should be placed in the acknowledgments rather than as 
+%  footnotes to the title or to an author's name.
 
-\section*{Data Availability}
+The authors would like to acknowledge the frequent discussions with Mohamed Zerroukat, Ben Shipway, Thomas Melvin and Nigel Wood which contributed to shaping this work, and for their feedback on early drafts of the manuscript. \change{The authors are grateful to Hilary Weller whose suggestions helped improve the manuscript, and also to Lucas Harris and the two anonymous referees for their reviews which led to an improved text.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DATA AVAILABILITY STATEMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%
+\datastatement
+%  The data availability statement is where authors should describe how the data underlying 
+%  the findings within the article can be accessed and reused. Authors should attempt to 
+%  provide unrestricted access to all data and materials underlying reported findings. 
+%  If data access is restricted, authors must mention this in the statement. See
+%  {http://www.ametsoc.org/PubsDataPolicy} for more info.
+
 The results contained in this work were produced with the LFRic-Atmosphere model.
 The LFRic-Atmosphere source code and configuration files are freely available from the Met Office Science Repository Service
 (https://code.metoffice.gov.uk) upon registration and completion of a software licence.
-Plotting scripts are stored in a  public Github repository (https://github.com/tommbendall/bendall\_kent\_swift\_2024\_plots).
+Plotting scripts are stored in \change{a  public Github repository (https://github.com/tommbendall/bendall\_kent\_swift\_2024\_plots).}
 
-\appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIXES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{The Piecewise Parabolic Method} \label{sec:ppm_appendix}
+\appendix[A] \label{sec:ppm_appendix}
+
+\appendixtitle{The Piecewise Parabolic Method}
 
 This appendix describes the Piecewise Parabolic Method (PPM, \citet{colella1984ppm}) used for the fractional flux in the testing in this paper.
 
@@ -1116,7 +1135,7 @@ This appendix describes the Piecewise Parabolic Method (PPM, \citet{colella1984p
 
 The unlimited PPM scheme \citep{colella1984ppm} computes the quadratic reconstruction such that: 1) the integral of the reconstruction equals the integral of the field within the departure cell; and 2) the reconstruction at the centres of cell facets equals a high-order interpolation of the field at those facets. \\
 \\
-Let $q_0$ and $q_1$ be the interpolation of a scalar field $q$ to cell $i$ facets. Setting $\mathcal{Q}(0)=q_0$ and $\mathcal{Q}(1) = q_1$ in \eqref{eqn:quad_coef} (i.e. at $\xi=0$ and $\xi=1$ respectively), and setting the integral of the subgrid reconstruction equal to $q_i$, gives the PPM coefficients
+Let $q_0$ and $q_1$ be the interpolation of \change{a scalar field} $q$ to cell $i$ facets. Setting $\mathcal{Q}(0)=q_0$ and $\mathcal{Q}(1) = q_1$ in \eqref{eqn:quad_coef} (i.e. at $\xi=0$ and $\xi=1$ respectively), and setting the integral of the subgrid reconstruction equal to $q_i$, gives the PPM coefficients
 \begin{subequations}
 \begin{align}
     a_0 &= q_0, \\
@@ -1177,14 +1196,18 @@ then if $\tau (1-\tau) > 0$ the reconstruction reverts to first-order by setting
 \end{equation}
 With this reconstruction, if the field is some constant $K$, then $q_0=q_i=q_1=K$, and $\mathcal{R}(q,c)=K$.
 
-\section{Test Cases} \label{sec:test_appendix}
+\appendix[B] \label{sec:test_appendix}
+
+%% Appendix title is necessary! For appendix title:
+
+\appendixtitle{Test Cases}
 
 This section describes the test cases used for the numerical testing in this article. 
 
 \subsection{Two-Dimensional Tests}
 
 The two-dimensional tests are set up on a doubly-periodic planar domain, with $500 \leq x,y \leq 500$ m, so that the domain's lengths were $L_x=1000$ m and $L_y=1000$ m.
-Tests are run to a time of 100 s.
+Tests are run to a time of \change{100} s.
 \\
 \\
 The tests either use a constant density, with $\rho=1$ kg m$^{-3}$, or a smooth varying density given by
@@ -1257,6 +1280,11 @@ u^z & = -u_0 \sin^2(\pi z/L_z)\sin(2 \pi x/L_x)\sin(2 \pi y/L_y)\cos(\pi t/T),
 \end{subequations}
 where $u_0=10$ m s$^{-1}$ and $x'$ and $y'$ are defined as for the two-dimensional deformational case.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{ametsocV6}
 \bibliography{main.bib}
 
 

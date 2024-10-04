@@ -16,10 +16,10 @@ from tomplot import (set_tomplot_style, tomplot_contours, tomplot_cmap,
 # Things that can be altered and parameters for the test case
 # ---------------------------------------------------------------------------- #
 # Directories for results and to plot to
-branch = 'r48987_swift_paper-transport-meto-spice-two_d'
-results_dirname_stem = f'/data/users/tbendall/cylc-run/{branch}/share/output/intel_64-bit_fast-debug/transport'
-plotdir = f'/data/users/tbendall/results/swift_paper'
-mesh_dt = 'BiP128x128-1000x1000_dt-2p0'
+branch = 'swift_revision'
+results_dirname = f'/data/users/tbendall/results/{branch}'
+plotdir = f'/data/users/tbendall/results/swift_revision'
+mesh_dt = 'BiP128x128-1000x1000_2p0'
 
 # To alter test-by-test
 test_number = 4
@@ -29,9 +29,9 @@ title = r'Test 2: Varying $\rho$, Deformational $u$, $c_{max}=5.12$'
 
 # Options relating to the different fields to be plotted
 field_names = ['rho', 'tracer_con', 'tracer_adv']
-cbar_labels = [r"$\rho \ / $ kg m$^{-3}$",
-               r"$m \ / $ kg kg$^{-1}$",
-               r"$m^L \ / $ kg kg$^{-1}$"]
+cbar_labels = [r"$\rho$ (kg m$^{-3}$)",
+               r"$m$ (kg kg$^{-1}$)",
+               r"$m^L$ (kg kg$^{-1}$)"]
 colour_schemes = ['YlGn', 'BuPu', 'BuPu']
 remove_contours = [0.8, 0.0, 0.0]
 
@@ -40,7 +40,7 @@ test_configs = ['cosmic', 'swift']
 config_titles = ['COSMIC', 'SWIFT']
 
 # Options shared for all plots and subplots
-time_factor = 250.0  # For some reason LFRic outputs the wrong time
+time_factor = 25.0  # For some reason LFRic outputs the wrong time
 xlabel = r'$x \ /$ km'
 ylabel = r'$y \ /$ km'
 contour_method = 'tricontour'
@@ -84,8 +84,7 @@ for l, time_idx in enumerate(time_idxs):
 
             ax = axarray.flatten()[k*len(field_names)+i]
 
-            results_dirname = f'{results_dirname_stem}/{results_opt}_test_{test_number}/{mesh_dt}/results'
-            main_filename = f'{results_dirname}/lfric_diag.nc'
+            main_filename = f'{results_dirname}/{results_opt}_test_{test_number}_{mesh_dt}_diag.nc'
 
             data_file = Dataset(main_filename, 'r')
 

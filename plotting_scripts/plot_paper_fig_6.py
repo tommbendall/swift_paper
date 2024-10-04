@@ -29,7 +29,7 @@ legend = True
 # ---------------------------------------------------------------------------- #
 
 resolutions = {1: [256, 300, 400, 512, 600],
-                2: [256, 300, 400, 512, 600],
+                2: [256, 300, 400, 512, 600, 700],
                 3: [256, 300, 400, 512, 600, 700],
                 4: [256, 300, 400, 512, 600, 700],
                 5: [50, 64, 100, 128, 200],
@@ -45,11 +45,11 @@ dts = {1: ['0p05']*len(resolutions[1]),
 # Paths
 # ---------------------------------------------------------------------------- #
 
-results_stem = '/data/users/tbendall/results/swift_paper'
-plot_stem = '/data/users/tbendall/results/swift_paper'
+results_stem = '/data/users/tbendall/results/swift_revision'
+plot_stem = '/data/users/tbendall/results/swift_revision'
 plot_name = f'{plot_stem}/fig_6_convergence.jpg'
 
-set_tomplot_style()
+set_tomplot_style(14)
 fig, axarray = plt.subplots(1, len(test_cases), figsize=(12, 5))
 
 # ---------------------------------------------------------------------------- #
@@ -70,7 +70,7 @@ for i, (test_case, ax) in enumerate(zip(test_cases, axarray)):
         for k, res in enumerate(resolutions[test_case]):
 
             dt = dts[test_case][k]
-            data_file = f'{results_stem}/{schemes[j]}_test_{test_case}_conv_BiP{res}x{res}-1000x1000_dt-{dt}.log'
+            data_file = f'{results_stem}/{schemes[j]}_test_{test_case}_conv_BiP{res}x{res}-1000x1000_{dt}.log'
 
             # ---------------------------------------------------------------- #
             # Extract data
@@ -95,7 +95,7 @@ for i, (test_case, ax) in enumerate(zip(test_cases, axarray)):
         # -------------------------------------------------------------------- #
 
         plot_convergence(ax, dxs, error_data, label=f'{labels[j]}:', color=colours[j],
-                         marker=markers[j])
+                         marker=markers[j], log_base=10)
 
     # Adjust x limits to fit legend on nicely
     xlims = ax.get_xlim()
@@ -104,17 +104,18 @@ for i, (test_case, ax) in enumerate(zip(test_cases, axarray)):
 
     only_minmax_ticklabels(ax)
     if legend:
-        ax.legend(loc='lower right', fontsize=14)
+        ax.legend(loc='lower right', fontsize=12)
 
     ax.set_title(titles[i])
     if i == 1:
-        ax.set_xlabel(r'$\log(\Delta x)$', labelpad=-10)
+        ax.set_xlabel(r'$\log_{10}(\Delta x)$', labelpad=0)
     if i == 0:
-        ax.set_ylabel(r'$\log(||q-q_{true}||/||q_{true}||)$', labelpad=-25)
+        ax.set_ylabel(r'$\log_{10}(||q-q_{true}||/||q_{true}||)$', labelpad=-25)
 
 # ---------------------------------------------------------------------------- #
 # Save figure
 # ---------------------------------------------------------------------------- #
+fig.subplots_adjust(wspace=0.25)
 print(f'Saving figure to {plot_name}')
 fig.savefig(plot_name, bbox_inches='tight', dpi=300)
 plt.close()
